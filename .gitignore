@@ -1,0 +1,7 @@
+*.qmlc
+*.jsc
+main/solutions/*
+.idea
+HarmonySolver.iml
+*.log
+.gitignore

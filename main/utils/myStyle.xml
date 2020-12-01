@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE museScore [
+
+  <!ENTITY pos_begin "m:-4.5:-10 ">
+  <!ENTITY pos_end "m:4.5:10 ">
+
+  <!ENTITY rev_begin "m:-4.5:5 ">
+  <!ENTITY rev_end "m:4.5:-5 ">
+
+  <!ENTITY extr_begin "m:0:-6 ">
+  <!ENTITY extr_end "m:0:6 " >
+
+  <!ENTITY degree_begin "m:0:3 ">
+  <!ENTITY degree_end "m:0:-3 ">
+
+  <!ENTITY delay_begin "m:2:-7 ">
+  <!ENTITY delay_end "m:-2:7 " >
+  <!ENTITY delay_up "m:0:-2.5 ">
+  <!ENTITY delay_down "m:0:2.5 " >
+
+  <!ENTITY backspace_dash "m:-5.2:0 ">
+  <!ENTITY dash "m:0:-2.5 floor m:-1:0 floor m:1:2.5 ">
+
+  <!ENTITY backspace_1 "m:-1.5:0 ">
+  <!ENTITY backspace_2 "m:-2.5:0 ">
+  <!ENTITY backspace_3 "m:-2.5:0 ">
+  <!ENTITY backspace_4 "m:-2.5:0 ">
+  <!ENTITY backspace_5 "m:-2.5:0 ">
+  <!ENTITY backspace_6 "m:-2.5:0 ">
+  <!ENTITY backspace_7 "m:-2.5:0 ">
+  <!ENTITY backspace_8 "m:-2.5:0 ">
+  <!ENTITY backspace_9 "m:-2.5:0 ">
+
+  <!ENTITY react_1 "1 &backspace_1; ">
+  <!ENTITY react_2 "2 &backspace_2; ">
+  <!ENTITY react_3 "3 &backspace_3; ">
+  <!ENTITY react_4 "4 &backspace_4; ">
+  <!ENTITY react_5 "5 &backspace_5; ">
+  <!ENTITY react_6 "6 &backspace_6; ">
+  <!ENTITY react_7 "7 &backspace_7; ">
+  <!ENTITY react_8 "8 &backspace_8; ">
+  <!ENTITY react_9 "9 &backspace_9; ">
+
+  <!ENTITY down_string " m:0:2 b m:0:-2 ">
+
+  <!ENTITY moll_string "o m:-2:0 ">
+
+  <!ENTITY open_string "( r . ) ">
+  <!ENTITY close_string "( s k . ) ">
+
+  <!ENTITY degI "&degree_begin; I &degree_end; ">
+  <!ENTITY degII "&degree_begin; I I &degree_end; ">
+  <!ENTITY degIII "&degree_begin; I I I &degree_end; ">
+  <!ENTITY degIV "&degree_begin; I V &degree_end; ">
+  <!ENTITY degV "&degree_begin; V &degree_end; ">
+  <!ENTITY degVI "&degree_begin; V I &degree_end; ">
+  <!ENTITY degVII "&degree_begin; V I I  &degree_end; ">
+
+  <!ENTITY backspace_I "m:-2.75:0 ">
+  <!ENTITY backspace_V "m:-3.25:0 ">
+
+  <!ENTITY react_degI "&degI; &backspace_I; ">
+  <!ENTITY react_degII "&degII; &backspace_I; &backspace_I; ">
+  <!ENTITY react_degIII "&degIII; &backspace_I; &backspace_I; &backspace_I; ">
+  <!ENTITY react_degIV "&degIV; &backspace_I; &backspace_V; ">
+  <!ENTITY react_degV "&degV; &backspace_V; ">
+  <!ENTITY react_degVI "&degVI; &backspace_I; &backspace_V; ">
+  <!ENTITY react_degVII "&degVII; &backspace_I; &backspace_I; &backspace_V; ">
+
+  <!ENTITY p1 "&pos_begin; &react_1; &pos_end; ">
+  <!ENTITY p1x "&pos_begin; &react_1; &react_lower; &pos_end; ">
+  <!ENTITY p1y "&pos_begin; &react_1; &react_greater; &pos_end; ">
+  <!ENTITY p3 "&pos_begin; &react_3; &pos_end; ">
+  <!ENTITY p3x "&pos_begin; &react_3; &react_lower; &pos_end; ">
+  <!ENTITY p3y "&pos_begin; &react_3; &react_greater; &pos_end; ">
+  <!ENTITY p5 "&pos_begin; &react_5; &pos_end; ">
+  <!ENTITY p5x "&pos_begin; &react_5; &react_lower; &pos_end; ">
+  <!ENTITY p5y "&pos_begin; &react_5; &react_greater; &pos_end; ">
+  <!ENTITY p6 "&pos_begin; &react_6; &pos_end; ">
+  <!ENTITY p6x "&pos_begin; &react_6; &react_lower; &pos_end; ">
+  <!ENTITY p6y "&pos_begin; &react_6; &react_greater; &pos_end; ">
+  <!ENTITY p7 "&pos_begin; &react_7; &pos_end; ">
+  <!ENTITY p7x "&pos_begin; &react_7; &react_lower; &pos_end; ">
+  <!ENTITY p7y "&pos_begin; &react_7; &react_greater; &pos_end; ">
+  <!ENTITY p8 "&pos_begin; &react_8; &pos_end; ">
+  <!ENTITY p8x "&pos_begin; &react_8; &react_lower; &pos_end; ">
+  <!ENTITY p8y "&pos_begin; &react_8; &react_greater; &pos_end; ">
+  <!ENTITY p9 "&pos_begin; &react_9; &pos_end; ">
+  <!ENTITY p9x "&pos_begin; &react_9; &react_lower; &pos_end; ">
+  <!ENTITY p9y "&pos_begin; &react_9; &react_greater;&pos_end; ">
+
+  <!ENTITY r1 "&rev_begin; &react_1; &rev_end; ">
+  <!ENTITY r1x "&rev_begin; &react_1; &react_lower; &rev_end; ">
+  <!ENTITY r1y "&rev_begin; &react_1; &react_greater; &rev_end; ">
+  <!ENTITY r3 "&rev_begin; &react_3; &rev_end; ">
+  <!ENTITY r3x "&rev_begin; &react_3; &react_lower; &rev_end; ">
+  <!ENTITY r3y "&rev_begin; &react_3; &react_greater; &rev_end; ">
+  <!ENTITY r5 "&rev_begin; &react_5; &rev_end; ">
+  <!ENTITY r5x "&rev_begin; &react_5; &react_lower; &rev_end; ">
+  <!ENTITY r5y "&rev_begin; &react_5; &react_greater; &rev_end; ">
+  <!ENTITY r6 "&rev_begin; &react_6; &rev_end; ">
+  <!ENTITY r6x "&rev_begin; &react_6; &react_lower; &rev_end; ">
+  <!ENTITY r6y "&rev_begin; &react_6; &react_greater; &rev_end; ">
+  <!ENTITY r7 "&rev_begin; &react_7; &rev_end; ">
+  <!ENTITY r7x "&rev_begin; &react_7; &react_lower; &rev_end; ">
+  <!ENTITY r7y "&rev_begin; &react_7; &react_greater; &rev_end; ">
+  <!ENTITY r9 "&rev_begin; &react_9; &rev_end; ">
+  <!ENTITY r9x "&rev_begin; &react_9; &react_lower; &rev_end; ">
+  <!ENTITY r9y "&rev_begin; &react_9; &react_greater; &rev_end; ">
+
+  <!ENTITY e6 "&extr_begin; &react_6; &extr_end; ">
+  <!ENTITY e6x "&extr_begin; &react_6; &react_lower; &extr_end; ">
+  <!ENTITY e6y "&extr_begin; &react_6; &react_greater; &extr_end; ">
+  <!ENTITY e7 "&extr_begin; &react_7; &extr_end; ">
+  <!ENTITY e7x "&extr_begin; &react_7; &react_lower; &extr_end; ">
+  <!ENTITY e7y "&extr_begin; &react_7; &react_greater; &extr_end; ">
+  <!ENTITY e8 "&extr_begin; &react_8; &extr_end; ">
+  <!ENTITY e8x "&extr_begin; &react_8; &react_lower; &extr_end; ">
+  <!ENTITY e8y "&extr_begin; &react_8; &react_greater; &extr_end; ">
+  <!ENTITY e9 "&extr_begin; &react_9; &extr_end; ">
+  <!ENTITY e9x "&extr_begin; &react_9; &react_lower; &extr_end; ">
+  <!ENTITY e9y "&extr_begin; &react_9; &react_greater; &extr_end; ">
+
+  <!ENTITY om1 "m:2:1 1 m:-2:-1 / m:2:1 ">
+  <!ENTITY om1x "m:2:1 1 m:-2:-1 / m:2:1 &react_lower; ">
+  <!ENTITY om1y "m:2:1 1 m:-2:-1 / m:2:1 &react_greater; ">
+  <!ENTITY om3 "m:2:1 3 m:-2.5:-1 / m:2.5:1 ">
+  <!ENTITY om3x "m:2:1 3 m:-2.5:-1 / m:2.5:1 &react_lower; ">
+  <!ENTITY om3y "m:2:1 3 m:-2.5:-1 / m:2.5:1 &react_greater; ">
+  <!ENTITY om5 "m:2:1 5 m:-2.5:-1 / m:2.5:1 ">
+  <!ENTITY om5x "m:2:1 5 m:-2.5:-1 / m:2.5:1 &react_lower; ">
+  <!ENTITY om5y "m:2:1 5 m:-2.5:-1 / m:2.5:1 &react_greater; ">
+
+  <!ENTITY delay2-1 "&delay_begin; 2 &dash; 1 &backspace_dash; &backspace_2; &backspace_1;  &delay_end; ">
+  <!ENTITY delay1-2 "&delay_begin; 1 &dash; 2 &backspace_dash; &backspace_1; &backspace_2;  &delay_end; ">
+  <!ENTITY delay2-1y "&delay_begin; 2 &dash; 1 &greater; &backspace_dash; &backspace_2; &backspace_1; &backspace_greater;  &delay_end; ">
+  <!ENTITY delay1y-2 "&delay_begin; 1 &greater; &dash; 2 &backspace_dash; &backspace_1; &backspace_2; &backspace_greater;  &delay_end; ">
+  <!ENTITY delay2y-1 "&delay_begin; 2 &greater; &dash; 1 &backspace_dash; &backspace_2; &backspace_1; &backspace_greater;  &delay_end; ">
+  <!ENTITY delay1-2y "&delay_begin; 1 &dash; 2 &greater; &backspace_dash; &backspace_1; &backspace_2; &backspace_greater;  &delay_end; ">
+  <!ENTITY delay2y-1y "&delay_begin; 2 &greater; &dash; 1 &greater; &backspace_dash; &backspace_2; &backspace_1; &backspace_greater; &backspace_greater;  &delay_end; ">
+  <!ENTITY delay1y-2y "&delay_begin; 1 &greater; &dash; 2 &greater; &backspace_dash; &backspace_1; &backspace_2; &backspace_greater; &backspace_greater;  &delay_end; ">
+  <!ENTITY delay42-31 "&delay_up; &delay4-3; &delay_down; &delay_down; &delay2-1; &delay_up; ">
+  <!ENTITY delay42-31y "&delay_up; &delay4-3; &delay_down; &delay_down; &delay2-1y; &delay_up; ">
+  <!ENTITY delay42y-31 "&delay_up; &delay4-3; &delay_down; &delay_down; &delay2y-1; &delay_up; ">
+  <!ENTITY delay42y-31y "&delay_up; &delay4-3; &delay_down; &delay_down; &delay2y-1y; &delay_up; ">
+  <!ENTITY delay4-3 "&delay_begin; 4 &dash; 3 &backspace_dash; &backspace_4; &backspace_3;  &delay_end; ">
+  <!ENTITY delay3-4 "&delay_begin; 3 &dash; 4 &backspace_dash; &backspace_3; &backspace_4;  &delay_end; ">
+  <!ENTITY delay42-3y1 "&delay_up; &delay4-3y; &delay_down; &delay_down; &delay2-1; &delay_up; ">
+  <!ENTITY delay42-3y1y "&delay_up; &delay4-3y; &delay_down; &delay_down; &delay2-1y; &delay_up; ">
+  <!ENTITY delay42y-3y1 "&delay_up; &delay4-3y; &delay_down; &delay_down; &delay2y-1; &delay_up; ">
+  <!ENTITY delay42y-3y1y "&delay_up; &delay4-3y; &delay_down; &delay_down; &delay2y-1y; &delay_up; ">
+  <!ENTITY delay4-3y "&delay_begin; 4 &dash; 3 &greater; &backspace_dash; &backspace_4; &backspace_3; &backspace_greater;  &delay_end; ">
+  <!ENTITY delay3y-4 "&delay_begin; 3 &greater; &dash; 4 &backspace_dash; &backspace_3; &backspace_4; &backspace_greater;  &delay_end; ">
+  <!ENTITY delay62-51 "&delay_up; &delay6-5; &delay_down; &delay_down; &delay2-1; &delay_up; ">
+  <!ENTITY delay62-51y "&delay_up; &delay6-5; &delay_down; &delay_down; &delay2-1y; &delay_up; ">
+  <!ENTITY delay62y-51 "&delay_up; &delay6-5; &delay_down; &delay_down; &delay2y-1; &delay_up; ">
+  <!ENTITY delay62y-51y "&delay_up; &delay6-5; &delay_down; &delay_down; &delay2y-1y; &delay_up; ">
+  <!ENTITY delay64-53 "&delay_up; &delay6-5; &delay_down; &delay_down; &delay4-3; &delay_up; ">
+  <!ENTITY delay64-53y "&delay_up; &delay6-5; &delay_down; &delay_down; &delay4-3y; &delay_up; ">
+  <!ENTITY delay6-5 "&delay_begin; 6 &dash; 5 &backspace_dash; &backspace_6; &backspace_5;  &delay_end; ">
+  <!ENTITY delay5-6 "&delay_begin; 5 &dash; 6 &backspace_dash; &backspace_5; &backspace_6;  &delay_end; ">
+  <!ENTITY delay62-5y1 "&delay_up; &delay6-5y; &delay_down; &delay_down; &delay2-1; &delay_up; ">
+  <!ENTITY delay62-5y1y "&delay_up; &delay6-5y; &delay_down; &delay_down; &delay2-1y; &delay_up; ">
+  <!ENTITY delay62y-5y1 "&delay_up; &delay6-5y; &delay_down; &delay_down; &delay2y-1; &delay_up; ">
+  <!ENTITY delay62y-5y1y "&delay_up; &delay6-5y; &delay_down; &delay_down; &delay2y-1y; &delay_up; ">
+  <!ENTITY delay64-5y3 "&delay_up; &delay6-5y; &delay_down; &delay_down; &delay4-3; &delay_up; ">
+  <!ENTITY delay64-5y3y "&delay_up; &delay6-5y; &delay_down; &delay_down; &delay4-3y; &delay_up; ">
+  <!ENTITY delay6-5y "&delay_begin; 6 &dash; 5 &greater; &backspace_dash; &backspace_6; &backspace_5; &backspace_greater;  &delay_end; ">
+  <!ENTITY delay5y-6 "&delay_begin; 5 &greater; &dash; 6 &backspace_dash; &backspace_5; &backspace_6; &backspace_greater;  &delay_end; ">
+  <!ENTITY delay62-5x1 "&delay_up; &delay6-5x; &delay_down; &delay_down; &delay2-1; &delay_up; ">
+  <!ENTITY delay62-5x1y "&delay_up; &delay6-5x; &delay_down; &delay_down; &delay2-1y; &delay_up; ">
+  <!ENTITY delay62y-5x1 "&delay_up; &delay6-5x; &delay_down; &delay_down; &delay2y-1; &delay_up; ">
+  <!ENTITY delay62y-5x1y "&delay_up; &delay6-5x; &delay_down; &delay_down; &delay2y-1y; &delay_up; ">
+  <!ENTITY delay64-5x3 "&delay_up; &delay6-5x; &delay_down; &delay_down; &delay4-3; &delay_up; ">
+  <!ENTITY delay64-5x3y "&delay_up; &delay6-5x; &delay_down; &delay_down; &delay4-3y; &delay_up; ">
+  <!ENTITY delay6-5x "&delay_begin; 6 &dash; 5 &lower; &backspace_dash; &backspace_6; &backspace_5; &backspace_lower;  &delay_end; ">
+  <!ENTITY delay5x-6 "&delay_begin; 5 &lower; &dash; 6 &backspace_dash; &backspace_5; &backspace_6; &backspace_lower;  &delay_end; ">
+  <!ENTITY delay6y2-51 "&delay_up; &delay6y-5; &delay_down; &delay_down; &delay2-1; &delay_up; ">
+  <!ENTITY delay6y2-51y "&delay_up; &delay6y-5; &delay_down; &delay_down; &delay2-1y; &delay_up; ">
+  <!ENTITY delay6y2y-51 "&delay_up; &delay6y-5; &delay_down; &delay_down; &delay2y-1; &delay_up; ">
+  <!ENTITY delay6y2y-51y "&delay_up; &delay6y-5; &delay_down; &delay_down; &delay2y-1y; &delay_up; ">
+  <!ENTITY delay6y4-53 "&delay_up; &delay6y-5; &delay_down; &delay_down; &delay4-3; &delay_up; ">
+  <!ENTITY delay6y4-53y "&delay_up; &delay6y-5; &delay_down; &delay_down; &delay4-3y; &delay_up; ">
+  <!ENTITY delay6y-5 "&delay_begin; 6 &greater; &dash; 5 &backspace_dash; &backspace_6; &backspace_5; &backspace_greater;  &delay_end; ">
+  <!ENTITY delay5-6y "&delay_begin; 5 &dash; 6 &greater; &backspace_dash; &backspace_5; &backspace_6; &backspace_greater;  &delay_end; ">
+  <!ENTITY delay6y2-5y1 "&delay_up; &delay6y-5y; &delay_down; &delay_down; &delay2-1; &delay_up; ">
+  <!ENTITY delay6y2-5y1y "&delay_up; &delay6y-5y; &delay_down; &delay_down; &delay2-1y; &delay_up; ">
+  <!ENTITY delay6y2y-5y1 "&delay_up; &delay6y-5y; &delay_down; &delay_down; &delay2y-1; &delay_up; ">
+  <!ENTITY delay6y2y-5y1y "&delay_up; &delay6y-5y; &delay_down; &delay_down; &delay2y-1y; &delay_up; ">
+  <!ENTITY delay6y4-5y3 "&delay_up; &delay6y-5y; &delay_down; &delay_down; &delay4-3; &delay_up; ">
+  <!ENTITY delay6y4-5y3y "&delay_up; &delay6y-5y; &delay_down; &delay_down; &delay4-3y; &delay_up; ">
+  <!ENTITY delay6y-5y "&delay_begin; 6 &greater; &dash; 5 &greater; &backspace_dash; &backspace_6; &backspace_5; &backspace_greater; &backspace_greater;  &delay_end; ">
+  <!ENTITY delay5y-6y "&delay_begin; 5 &greater; &dash; 6 &greater; &backspace_dash; &backspace_5; &backspace_6; &backspace_greater; &backspace_greater;  &delay_end; ">
+  <!ENTITY delay6y2-5x1 "&delay_up; &delay6y-5x; &delay_down; &delay_down; &delay2-1; &delay_up; ">
+  <!ENTITY delay6y2-5x1y "&delay_up; &delay6y-5x; &delay_down; &delay_down; &delay2-1y; &delay_up; ">
+  <!ENTITY delay6y2y-5x1 "&delay_up; &delay6y-5x; &delay_down; &delay_down; &delay2y-1; &delay_up; ">
+  <!ENTITY delay6y2y-5x1y "&delay_up; &delay6y-5x; &delay_down; &delay_down; &delay2y-1y; &delay_up; ">
+  <!ENTITY delay6y4-5x3 "&delay_up; &delay6y-5x; &delay_down; &delay_down; &delay4-3; &delay_up; ">
+  <!ENTITY delay6y4-5x3y "&delay_up; &delay6y-5x; &delay_down; &delay_down; &delay4-3y; &delay_up; ">
+  <!ENTITY delay6y-5x "&delay_begin; 6 &greater; &dash; 5 &lower; &backspace_dash; &backspace_6; &backspace_5; &backspace_greater; &backspace_lower;  &delay_end; ">
+  <!ENTITY delay5x-6y "&delay_begin; 5 &lower; &dash; 6 &greater; &backspace_dash; &backspace_5; &backspace_6; &backspace_greater; &backspace_lower;  &delay_end; ">
+  <!ENTITY delay72-61 "&delay_up; &delay7-6; &delay_down; &delay_down; &delay2-1; &delay_up; ">
+  <!ENTITY delay72-61y "&delay_up; &delay7-6; &delay_down; &delay_down; &delay2-1y; &delay_up; ">
+  <!ENTITY delay72y-61 "&delay_up; &delay7-6; &delay_down; &delay_down; &delay2y-1; &delay_up; ">
+  <!ENTITY delay72y-61y "&delay_up; &delay7-6; &delay_down; &delay_down; &delay2y-1y; &delay_up; ">
+  <!ENTITY delay74-63 "&delay_up; &delay7-6; &delay_down; &delay_down; &delay4-3; &delay_up; ">
+  <!ENTITY delay74-63y "&delay_up; &delay7-6; &delay_down; &delay_down; &delay4-3y; &delay_up; ">
+  <!ENTITY delay76-65 "&delay_up; &delay7-6; &delay_down; &delay_down; &delay6-5; &delay_up; ">
+  <!ENTITY delay76-65y "&delay_up; &delay7-6; &delay_down; &delay_down; &delay6-5y; &delay_up; ">
+  <!ENTITY delay76-65x "&delay_up; &delay7-6; &delay_down; &delay_down; &delay6-5x; &delay_up; ">
+  <!ENTITY delay76y-65 "&delay_up; &delay7-6; &delay_down; &delay_down; &delay6y-5; &delay_up; ">
+  <!ENTITY delay76y-65y "&delay_up; &delay7-6; &delay_down; &delay_down; &delay6y-5y; &delay_up; ">
+  <!ENTITY delay76y-65x "&delay_up; &delay7-6; &delay_down; &delay_down; &delay6y-5x; &delay_up; ">
+  <!ENTITY delay7-6 "&delay_begin; 7 &dash; 6 &backspace_dash; &backspace_7; &backspace_6;  &delay_end; ">
+  <!ENTITY delay6-7 "&delay_begin; 6 &dash; 7 &backspace_dash; &backspace_6; &backspace_7;  &delay_end; ">
+  <!ENTITY delay72-6y1 "&delay_up; &delay7-6y; &delay_down; &delay_down; &delay2-1; &delay_up; ">
+  <!ENTITY delay72-6y1y "&delay_up; &delay7-6y; &delay_down; &delay_down; &delay2-1y; &delay_up; ">
+  <!ENTITY delay72y-6y1 "&delay_up; &delay7-6y; &delay_down; &delay_down; &delay2y-1; &delay_up; ">
+  <!ENTITY delay72y-6y1y "&delay_up; &delay7-6y; &delay_down; &delay_down; &delay2y-1y; &delay_up; ">
+  <!ENTITY delay74-6y3 "&delay_up; &delay7-6y; &delay_down; &delay_down; &delay4-3; &delay_up; ">
+  <!ENTITY delay74-6y3y "&delay_up; &delay7-6y; &delay_down; &delay_down; &delay4-3y; &delay_up; ">
+  <!ENTITY delay76-6y5 "&delay_up; &delay7-6y; &delay_down; &delay_down; &delay6-5; &delay_up; ">
+  <!ENTITY delay76-6y5y "&delay_up; &delay7-6y; &delay_down; &delay_down; &delay6-5y; &delay_up; ">
+  <!ENTITY delay76-6y5x "&delay_up; &delay7-6y; &delay_down; &delay_down; &delay6-5x; &delay_up; ">
+  <!ENTITY delay76y-6y5 "&delay_up; &delay7-6y; &delay_down; &delay_down; &delay6y-5; &delay_up; ">
+  <!ENTITY delay76y-6y5y "&delay_up; &delay7-6y; &delay_down; &delay_down; &delay6y-5y; &delay_up; ">
+  <!ENTITY delay76y-6y5x "&delay_up; &delay7-6y; &delay_down; &delay_down; &delay6y-5x; &delay_up; ">
+  <!ENTITY delay7-6y "&delay_begin; 7 &dash; 6 &greater; &backspace_dash; &backspace_7; &backspace_6; &backspace_greater;  &delay_end; ">
+  <!ENTITY delay6y-7 "&delay_begin; 6 &greater; &dash; 7 &backspace_dash; &backspace_6; &backspace_7; &backspace_greater;  &delay_end; ">
+  <!ENTITY delay7x2-61 "&delay_up; &delay7x-6; &delay_down; &delay_down; &delay2-1; &delay_up; ">
+  <!ENTITY delay7x2-61y "&delay_up; &delay7x-6; &delay_down; &delay_down; &delay2-1y; &delay_up; ">
+  <!ENTITY delay7x2y-61 "&delay_up; &delay7x-6; &delay_down; &delay_down; &delay2y-1; &delay_up; ">
+  <!ENTITY delay7x2y-61y "&delay_up; &delay7x-6; &delay_down; &delay_down; &delay2y-1y; &delay_up; ">
+  <!ENTITY delay7x4-63 "&delay_up; &delay7x-6; &delay_down; &delay_down; &delay4-3; &delay_up; ">
+  <!ENTITY delay7x4-63y "&delay_up; &delay7x-6; &delay_down; &delay_down; &delay4-3y; &delay_up; ">
+  <!ENTITY delay7x6-65 "&delay_up; &delay7x-6; &delay_down; &delay_down; &delay6-5; &delay_up; ">
+  <!ENTITY delay7x6-65y "&delay_up; &delay7x-6; &delay_down; &delay_down; &delay6-5y; &delay_up; ">
+  <!ENTITY delay7x6-65x "&delay_up; &delay7x-6; &delay_down; &delay_down; &delay6-5x; &delay_up; ">
+  <!ENTITY delay7x6y-65 "&delay_up; &delay7x-6; &delay_down; &delay_down; &delay6y-5; &delay_up; ">
+  <!ENTITY delay7x6y-65y "&delay_up; &delay7x-6; &delay_down; &delay_down; &delay6y-5y; &delay_up; ">
+  <!ENTITY delay7x6y-65x "&delay_up; &delay7x-6; &delay_down; &delay_down; &delay6y-5x; &delay_up; ">
+  <!ENTITY delay7x-6 "&delay_begin; 7 &lower; &dash; 6 &backspace_dash; &backspace_7; &backspace_6; &backspace_lower;  &delay_end; ">
+  <!ENTITY delay6-7x "&delay_begin; 6 &dash; 7 &lower; &backspace_dash; &backspace_6; &backspace_7; &backspace_lower;  &delay_end; ">
+  <!ENTITY delay7x2-6y1 "&delay_up; &delay7x-6y; &delay_down; &delay_down; &delay2-1; &delay_up; ">
+  <!ENTITY delay7x2-6y1y "&delay_up; &delay7x-6y; &delay_down; &delay_down; &delay2-1y; &delay_up; ">
+  <!ENTITY delay7x2y-6y1 "&delay_up; &delay7x-6y; &delay_down; &delay_down; &delay2y-1; &delay_up; ">
+  <!ENTITY delay7x2y-6y1y "&delay_up; &delay7x-6y; &delay_down; &delay_down; &delay2y-1y; &delay_up; ">
+  <!ENTITY delay7x4-6y3 "&delay_up; &delay7x-6y; &delay_down; &delay_down; &delay4-3; &delay_up; ">
+  <!ENTITY delay7x4-6y3y "&delay_up; &delay7x-6y; &delay_down; &delay_down; &delay4-3y; &delay_up; ">
+  <!ENTITY delay7x6-6y5 "&delay_up; &delay7x-6y; &delay_down; &delay_down; &delay6-5; &delay_up; ">
+  <!ENTITY delay7x6-6y5y "&delay_up; &delay7x-6y; &delay_down; &delay_down; &delay6-5y; &delay_up; ">
+  <!ENTITY delay7x6-6y5x "&delay_up; &delay7x-6y; &delay_down; &delay_down; &delay6-5x; &delay_up; ">
+  <!ENTITY delay7x6y-6y5 "&delay_up; &delay7x-6y; &delay_down; &delay_down; &delay6y-5; &delay_up; ">
+  <!ENTITY delay7x6y-6y5y "&delay_up; &delay7x-6y; &delay_down; &delay_down; &delay6y-5y; &delay_up; ">
+  <!ENTITY delay7x6y-6y5x "&delay_up; &delay7x-6y; &delay_down; &delay_down; &delay6y-5x; &delay_up; ">
+  <!ENTITY delay7x-6y "&delay_begin; 7 &lower; &dash; 6 &greater; &backspace_dash; &backspace_7; &backspace_6; &backspace_greater; &backspace_lower;  &delay_end; ">
+  <!ENTITY delay6y-7x "&delay_begin; 6 &greater; &dash; 7 &lower; &backspace_dash; &backspace_6; &backspace_7; &backspace_greater; &backspace_lower;  &delay_end; ">
+  <!ENTITY delay92-81 "&delay_up; &delay9-8; &delay_down; &delay_down; &delay2-1; &delay_up; ">
+  <!ENTITY delay92-81y "&delay_up; &delay9-8; &delay_down; &delay_down; &delay2-1y; &delay_up; ">
+  <!ENTITY delay92y-81 "&delay_up; &delay9-8; &delay_down; &delay_down; &delay2y-1; &delay_up; ">
+  <!ENTITY delay92y-81y "&delay_up; &delay9-8; &delay_down; &delay_down; &delay2y-1y; &delay_up; ">
+  <!ENTITY delay94-83 "&delay_up; &delay9-8; &delay_down; &delay_down; &delay4-3; &delay_up; ">
+  <!ENTITY delay94-83y "&delay_up; &delay9-8; &delay_down; &delay_down; &delay4-3y; &delay_up; ">
+  <!ENTITY delay96-85 "&delay_up; &delay9-8; &delay_down; &delay_down; &delay6-5; &delay_up; ">
+  <!ENTITY delay96-85y "&delay_up; &delay9-8; &delay_down; &delay_down; &delay6-5y; &delay_up; ">
+  <!ENTITY delay96-85x "&delay_up; &delay9-8; &delay_down; &delay_down; &delay6-5x; &delay_up; ">
+  <!ENTITY delay96y-85 "&delay_up; &delay9-8; &delay_down; &delay_down; &delay6y-5; &delay_up; ">
+  <!ENTITY delay96y-85y "&delay_up; &delay9-8; &delay_down; &delay_down; &delay6y-5y; &delay_up; ">
+  <!ENTITY delay96y-85x "&delay_up; &delay9-8; &delay_down; &delay_down; &delay6y-5x; &delay_up; ">
+  <!ENTITY delay97-86 "&delay_up; &delay9-8; &delay_down; &delay_down; &delay7-6; &delay_up; ">
+  <!ENTITY delay97-86y "&delay_up; &delay9-8; &delay_down; &delay_down; &delay7-6y; &delay_up; ">
+  <!ENTITY delay97x-86 "&delay_up; &delay9-8; &delay_down; &delay_down; &delay7x-6; &delay_up; ">
+  <!ENTITY delay97x-86y "&delay_up; &delay9-8; &delay_down; &delay_down; &delay7x-6y; &delay_up; ">
+  <!ENTITY delay9-8 "&delay_begin; 9 &dash; 8 &backspace_dash; &backspace_9; &backspace_8;  &delay_end; ">
+  <!ENTITY delay8-9 "&delay_begin; 8 &dash; 9 &backspace_dash; &backspace_8; &backspace_9;  &delay_end; ">
+  <!ENTITY delay9y2-81 "&delay_up; &delay9y-8; &delay_down; &delay_down; &delay2-1; &delay_up; ">
+  <!ENTITY delay9y2-81y "&delay_up; &delay9y-8; &delay_down; &delay_down; &delay2-1y; &delay_up; ">
+  <!ENTITY delay9y2y-81 "&delay_up; &delay9y-8; &delay_down; &delay_down; &delay2y-1; &delay_up; ">
+  <!ENTITY delay9y2y-81y "&delay_up; &delay9y-8; &delay_down; &delay_down; &delay2y-1y; &delay_up; ">
+  <!ENTITY delay9y4-83 "&delay_up; &delay9y-8; &delay_down; &delay_down; &delay4-3; &delay_up; ">
+  <!ENTITY delay9y4-83y "&delay_up; &delay9y-8; &delay_down; &delay_down; &delay4-3y; &delay_up; ">
+  <!ENTITY delay9y6-85 "&delay_up; &delay9y-8; &delay_down; &delay_down; &delay6-5; &delay_up; ">
+  <!ENTITY delay9y6-85y "&delay_up; &delay9y-8; &delay_down; &delay_down; &delay6-5y; &delay_up; ">
+  <!ENTITY delay9y6-85x "&delay_up; &delay9y-8; &delay_down; &delay_down; &delay6-5x; &delay_up; ">
+  <!ENTITY delay9y6y-85 "&delay_up; &delay9y-8; &delay_down; &delay_down; &delay6y-5; &delay_up; ">
+  <!ENTITY delay9y6y-85y "&delay_up; &delay9y-8; &delay_down; &delay_down; &delay6y-5y; &delay_up; ">
+  <!ENTITY delay9y6y-85x "&delay_up; &delay9y-8; &delay_down; &delay_down; &delay6y-5x; &delay_up; ">
+  <!ENTITY delay9y7-86 "&delay_up; &delay9y-8; &delay_down; &delay_down; &delay7-6; &delay_up; ">
+  <!ENTITY delay9y7-86y "&delay_up; &delay9y-8; &delay_down; &delay_down; &delay7-6y; &delay_up; ">
+  <!ENTITY delay9y7x-86 "&delay_up; &delay9y-8; &delay_down; &delay_down; &delay7x-6; &delay_up; ">
+  <!ENTITY delay9y7x-86y "&delay_up; &delay9y-8; &delay_down; &delay_down; &delay7x-6y; &delay_up; ">
+  <!ENTITY delay9y-8 "&delay_begin; 9 &greater; &dash; 8 &backspace_dash; &backspace_9; &backspace_8; &backspace_greater;  &delay_end; ">
+  <!ENTITY delay8-9y "&delay_begin; 8 &dash; 9 &greater; &backspace_dash; &backspace_8; &backspace_9; &backspace_greater;  &delay_end; ">
+
+  <!ENTITY down "m:0:3 &down_string; m:0:-3 ">
+  <!ENTITY backspace_down "m:-3.25:0 ">
+  <!ENTITY react_down "&down; &backspace_down; ">
+
+  <!ENTITY moll "m:-10:-6 &moll_string; m:10:6 ">
+
+  <!ENTITY open "m:0:1 &open_string; m:0:-1 ">
+  <!ENTITY open "m:0:1 &open_string; m:0:-1 ">
+  <!ENTITY close "m:0:1 &close_string; m:0:-1 ">
+
+  <!ENTITY lower "m:0:-1 lower m:0:1 ">
+  <!ENTITY backspace_lower " m:-2.5:0 ">
+  <!ENTITY greater "m:0:-1 greater m:0:1 ">
+  <!ENTITY backspace_greater " m:-2.5:0 ">
+
+  <!ENTITY react_lower "m:1.5:-1 lower m:-4:1 ">
+  <!ENTITY react_greater "m:1.5:-1 greater m:-4:1 ">
+
+  <!ENTITY backspace_lb "m:-3:0 ">
+  <!ENTITY backspace_rb "m:-3:0 ">
+  <!ENTITY lb "m:-12:0 ( &backspace_lb; m:12:0 ">
+  <!ENTITY spacing "m:13:0 ">
+  <!ENTITY rb "m:2:0 ) &backspace_rb; m:-2:0 ">
+
+  <!ENTITY spacing_rb "&spacing; &rb; ">
+
+  ]>
+<museScore version="1.11">
+
+<!--
+      Part I: font list
+            associate symbols (code points) with names
+      If no font family is given or font family is "default" then the
+      configured text style font family is used.
+-->
+
+  <font id="0" family="MuseJazz Text">
+
+    <sym code="0x2d" name="minus"/>
+
+    <sym code="0x54" name="A"/>
+    <sym code="0x53" name="B"/>
+    <sym code="0x44" name="D"/>
+    <sym code="0x3d" name="C"/>
+
+    <sym code="0x28" name="("/>
+    <sym code="0x29" name=")"/>
+    
+  </font>
+
+  <font id="1" family="MuseJazz Text">
+    <mag>0.80</mag>
+
+    <sym code="0xe10c" name="#"/>
+    <sym code="0xe10d" name="b"/>
+  </font>
+
+  <font id="2" family="MuseJazz Text">
+    <mag>0.50</mag>
+
+    <sym code="0x2F" name="/"/>
+    <sym code="0x30" name="0"/>
+    <sym code="0x31" name="1"/>
+    <sym code="0x32" name="2"/>
+    <sym code="0x33" name="3"/>
+    <sym code="0x34" name="4"/>
+    <sym code="0x35" name="5"/>
+    <sym code="0x36" name="6"/>
+    <sym code="0x37" name="7"/>
+    <sym code="0x38" name="8"/>
+    <sym code="0x39" name="9"/>
+
+    <sym code="0x49" name="I"/>
+    <sym code="0x56" name="V"/>
+
+    <sym code="0x6f" name="o"/>
+
+    <sym code="0x73" name="s"/>
+    <sym code="0x6b" name="k"/>
+    <sym code="0x72" name="r"/>
+
+    <sym code="0xba" name="moll_char"/>
+
+    <sym code="0x5f" name="floor"/>
+  </font>
+
+  <font id="3" family="MuseJazz Text">
+      <mag>0.35</mag>
+
+    <sym code="0x3c" name="lower"/>
+    <sym code="0x3e" name="greater"/>
+
+  </font>
+<!--
+      Part II: chord list
+
+         id       internal chord number
+         render   this is a script which contains render commands
+                  commands:
+                        xxx         draw symbol name xxx
+                        m:x:y       add x:y to current position (1/5 spatium units)
+                        :push
+                        :pop
+                        :n          root or base note
+                        :a          accidental
+-->
+
+  <renderRoot> :n :a </renderRoot>
+  <renderBase> / :n :a </renderBase>
+

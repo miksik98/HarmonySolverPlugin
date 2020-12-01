@@ -1,0 +1,10 @@
+G
+4/4
+T{position:1};T{degree:6};(D{isRelatedBackwards/revolution:7})
+D{revolution:5/extra:7};T{revolution:3};(D{extra:9})
+D{};(D{omit:1/extra:9>});T{degree:6};S{extra:6}
+T{};D{};D{revolution:7}
+T{position:5};(D{extra:7});D{extra:7}
+T{degree:6};(D{extra:7};D{extra:9>/omit:1})
+S{degree:2};S{degree:2/extra:7};D{delay:6-5,4-3/extra:7}
+T{}
