@@ -23,18 +23,20 @@ function SopranoRulesChecker(key, mode, punishmentRatios){
             new ChordRulesChecker.ChordRulesChecker(false,true),
             new ChordGenerator.ChordGenerator(this.key,this.mode)),
         new SecondaryDominantConnectionRule(this.key),
-        new Revolution5Rule()
+        new Revolution5Rule(),
+        new DownAndNotDownRule(),
+        new DegreeRule()
     ];
     this.softRules = [
+        new HarmonicFunctionRelationRule(),
         new FourthChordsRule(),
-        new DominantRelationRule(),
         new ChangeFunctionConnectionRule(),
         new JumpRule(),
-        new SecondRelationRule(),
         new ChangeFunctionOnDownBeatRule(),
         new ChangeFunctionAtMeasureBeginningRule(),
-        new RevolutionOneShouldBe1(),
-        new SopranoShouldBeDoubled()
+        new PreferNeapolitanRule(),
+        new SopranoShouldBeDoubled(),
+        new PreferTriadRule()
         ];
 }
 
@@ -69,6 +71,17 @@ function ExistsSolutionRule(chordRulesChecker, chordGenerator){
     }
 }
 
+function DownAndNotDownRule(){
+    RulesCheckerUtils.IRule.call(this);
+    this.evaluate = function(connection){
+        if(connection.prev.harmonicFunction.down !== connection.current.harmonicFunction.down &&
+            connection.prev.harmonicFunction.degree === connection.current.harmonicFunction.degree &&
+            connection.prev.harmonicFunction.key === connection.current.harmonicFunction.degree)
+            return -1;
+        return 0;
+    }
+}
+
 function SpecialConnectionRule(punishment, prevFunctionName, currentFunctionName){
     RulesCheckerUtils.IRule.call(this);
     this.currentFunctionName = currentFunctionName;
@@ -76,7 +89,7 @@ function SpecialConnectionRule(punishment, prevFunctionName, currentFunctionName
     this.evaluate = function(connection){
         var newConnection = this.translateConnectionIncludingDeflections(connection);
         if(!Utils.isDefined(newConnection))
-            return 0;
+            return 0    //prevFunctionName === Consts.FUNCTION_NAMES.DOMINANT ? -1 : 0;
         if(newConnection.current.harmonicFunction.functionName === this.currentFunctionName &&
             newConnection.prev.harmonicFunction.functionName === this.prevFunctionName){
                 return punishment;
@@ -141,6 +154,53 @@ function ForbiddenDSConnectionRule(){
     }
 }
 
+function HarmonicFunctionRelationRule(){
+    RulesCheckerUtils.IRule.call(this);
+
+    this.allSubRulesBroken = true;
+    this.subRules = [
+        new DominantRelationRule(),
+        new SecondRelationRule(),
+        new SubdominantRelationRule()
+    ];
+
+    this.evaluate = function(connection){
+        if(connection.current.harmonicFunction.equals(connection.prev.harmonicFunction))
+            return 5;
+        var evaluationResult = this.evaluateSubRules(connection);
+        if(this.allSubRulesBroken){
+            return 70;
+        }
+        return evaluationResult;
+    };
+
+    this.evaluateSubRules = function(connection){
+        var evaluationResult = 0;
+        for(var i = 0; i < this.subRules.length; i++) {
+            var currentResult = this.subRules[i].evaluate(connection);
+            if(currentResult < 10) {
+                this.allSubRulesBroken = false;
+                return currentResult;
+            }
+            evaluationResult += currentResult;
+        }
+        return evaluationResult;
+    };
+}
+
+function SubdominantRelationRule(){
+    RulesCheckerUtils.IRule.call(this);
+    this.evaluate = function(connection){
+        if(connection.prev.harmonicFunction.isInSubdominantRelation(connection.current.harmonicFunction)){
+            if(connection.prev.harmonicFunction.key !== connection.current.harmonicFunction.key){
+                return 2;
+            } else
+                return 0;
+        }
+        return 4;
+    }
+}
+
 function DominantRelationRule(){
     RulesCheckerUtils.IRule.call(this);
     this.evaluate = function(connection){
@@ -150,7 +210,9 @@ function DominantRelationRule(){
             } else
                 return 0;
         }
-        return 9;
+        if(connection.current.harmonicFunction.degree === 1)
+            return 50;
+        return 15;
     }
 }
 
@@ -193,9 +255,9 @@ function JumpRule(){
         var sameFunctionRule = new NotChangeFunctionRule();
         var ruleIsNotBroken = sameFunctionRule.isNotBroken(connection);
         if(IntervalUtils.pitchOffsetBetween(connection.current.sopranoNote, connection.prev.sopranoNote) > 2){
-             return ruleIsNotBroken ? 0 : 5;
+             return ruleIsNotBroken ? 0 : 10;
         }
-        return ruleIsNotBroken ? 5 : 0;
+        return ruleIsNotBroken ? 10 : 0;
     }
 }
 
@@ -204,7 +266,7 @@ function ChangeFunctionOnDownBeatRule(){
     this.evaluate = function(connection){
         var sameFunctionRule = new NotChangeFunctionRule();
         if(sameFunctionRule.isBroken(connection) && connection.current.measurePlace === Consts.MEASURE_PLACE.UPBEAT){
-            return 10;
+            return 5;
         }
         return 0;
     }
@@ -229,7 +291,8 @@ function SecondaryDominantConnectionRule(key) {
 function FourthChordsRule(){
     RulesCheckerUtils.IRule.call(this);
     this.evaluate = function (connection) {
-        if(connection.current.harmonicFunction.countChordComponents() === 3){
+        if(connection.current.harmonicFunction.countChordComponents() === 3 &&
+            Utils.contains([1,4,5], connection.current.harmonicFunction.degree)){
             return 8;
         }
         return 0;
@@ -247,18 +310,14 @@ function Revolution5Rule(){
     }
 }
 
-function RevolutionOneShouldBe1(){
+function PreferNeapolitanRule(){
     RulesCheckerUtils.IRule.call(this);
     this.evaluate = function (connection) {
-        if(connection.current.harmonicFunction.revolution !== connection.current.harmonicFunction.getPrime() ||
-            connection.prev.harmonicFunction.revolution !== connection.prev.harmonicFunction.getPrime()){
-            return 4;
-        }
-        if(connection.current.harmonicFunction.revolution === connection.current.harmonicFunction.getPrime() &&
-            connection.prev.harmonicFunction.revolution === connection.prev.harmonicFunction.getPrime()){
-            return 1;
-        }
-        return 0;
+        if(connection.current.harmonicFunction.degree !== 2)
+            return 0;
+        if(connection.current.harmonicFunction.isNeapolitan())
+            return 0;
+        return 1;
     }
 }
 
@@ -266,7 +325,29 @@ function SopranoShouldBeDoubled(){
     RulesCheckerUtils.IRule.call(this);
     this.evaluate = function (connection) {
         if(connection.current.harmonicFunction.position !== connection.current.harmonicFunction.revolution)
-            return 1;
+            return 3;
+        return 0;
+    }
+}
+
+function PreferTriadRule(){
+    RulesCheckerUtils.IRule.call(this);
+    this.evaluate = function (connection) {
+        if(Utils.contains([1,4,5],connection.current.harmonicFunction.degree))
+            return 0;
+        return 5;
+    }
+}
+
+function DegreeRule(){
+    RulesCheckerUtils.IRule.call(this);
+    this.evaluate = function (connection) {
+        if(connection.current.harmonicFunction.degree === connection.prev.harmonicFunction.degree &&
+            connection.current.harmonicFunction.functionName !== connection.prev.harmonicFunction.functionName)
+            return -1;
+        if(connection.current.harmonicFunction.functionName === connection.prev.harmonicFunction.functionName &&
+            connection.current.harmonicFunction.degree !== connection.prev.harmonicFunction.degree)
+            return -1;
         return 0;
     }
 }

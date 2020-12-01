@@ -52,7 +52,8 @@ function AdaptiveChordRulesChecker(punishmentRatios){
         new SopranoBestLineRule("Soprano line should not contain big jumps"),
         new DominantRelationCheckConnectionRule("Dominant relation voice wrong movement"),
         new DominantSecondRelationCheckConnectionRule("Dominant second relation voice wrong movement"),
-        new SubdominantDominantCheckConnectionRule("Subdominant Dominant relation voice wrong movement")
+        new SubdominantDominantCheckConnectionRule("Subdominant Dominant relation voice wrong movement"),
+        new ClosestMoveInBassRule(true, "Not closest move in bass")
     ];
 
     this.addPunishmentRatiosToRules = function() {
@@ -353,10 +354,10 @@ function FalseRelationRule(details, evaluationRatio){
         if(prevVoice === 0 || currentVoice === 0)
             return true;
         //given soprano, couldn't avoid false relation
-        if(prevVoice === 3 || currentVoice === 3){
-            if(Utils.isDefined(prevChord.harmonicFunction.position) && Utils.isDefined(currentChord.harmonicFunction.position))
-                return true;
-        }
+        // if(prevVoice === 3 || currentVoice === 3){
+        //     if(Utils.isDefined(prevChord.harmonicFunction.position) && Utils.isDefined(currentChord.harmonicFunction.position))
+        //         return true;
+        // }
         return false;
     }
 }
@@ -519,15 +520,43 @@ function ClosestMoveRule(details){
                 if(j !== i){
                     for(var currentPitch=currentChord.notes[j].pitch; currentPitch<vb.sopranoMax; currentPitch += 12){
                         if(currentPitch < higherPitch && currentPitch > lowerPitch){
-                            return 5;
+                            return 10;
                         }
                     }
                     for(var currentPitch=currentChord.notes[j].pitch; currentPitch<vb.tenorMin; currentPitch -= 12){
                         if(currentPitch < higherPitch && currentPitch > lowerPitch){
-                            return 5;
+                            return 10;
                         }
                     }
                 }
+            }
+        }
+        return 0;
+    };
+}
+
+function ClosestMoveInBassRule(isFixedSoprano, details){
+    RulesCheckerUtils.IRule.call(this, details);
+
+    this.isFixedSoprano = isFixedSoprano;
+
+    this.evaluate = function(connection) {
+        if(!this.isFixedSoprano)
+            return 0;
+        var currentChord = connection.current;
+        var prevChord = connection.prev;
+        var bassPitch = currentChord.bassNote.pitch;
+        var prevBassPitch = prevChord.bassNote.pitch;
+        var offset = Utils.abs(bassPitch - prevBassPitch);
+
+        for(var i = 1; i < 4; i++){
+            var pitch = currentChord.notes[i].pitch;
+            if(Utils.contains(currentChord.harmonicFunction.getBasicChordComponents(), currentChord.notes[i].chordComponent) &&
+                currentChord.harmonicFunction.revolution !== currentChord.notes[i].chordComponent){
+                while(Utils.abs(prevBassPitch - pitch) >= 12)
+                    pitch -= 12;
+                if(Utils.abs(pitch - prevBassPitch) < offset)
+                    return 50;
             }
         }
         return 0;
@@ -547,12 +576,12 @@ function DoublePrimeOrFifthRule(details) {
         //double soprano component
         if(currentChord.harmonicFunction.revolution.chordComponentString === "1"){
             if(currentChord.countBaseComponents(currentChord.sopranoNote.chordComponent.baseComponent) === 1)
-                return 3;
+                return 2;
         }
         //double fifth if revolution === fifth
         if(currentChord.harmonicFunction.revolution.chordComponentString === currentChord.harmonicFunction.getFifth()){
             if(currentChord.countBaseComponents(currentChord.harmonicFunction.getFifth()) === 1)
-                return 3;
+                return 2;
         }
         return 0;
     }
@@ -567,7 +596,7 @@ function SopranoBestLineRule(details){
         var prevChord = connection.prev;
 
         if(IntervalUtils.pitchOffsetBetween(prevChord.sopranoNote, currentChord.sopranoNote) > 4)
-            return 2;
+            return 3;
         return 0;
     }
 }
