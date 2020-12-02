@@ -14,14 +14,14 @@ function ChordRulesChecker(isFixedBass, isFixedSoprano){
     this.isFixedSoprano = isFixedSoprano;
 
     this.hardRules = [
-        new ConcurrentOctavesRule("Consecutive octaves"),
-        new ConcurrentFifthsRule("Consecutive fifths"),
+        new ConcurrentOctavesRule("Parallel octaves"),
+        new ConcurrentFifthsRule("Parallel fifths"),
         new IllegalDoubledThirdRule("Illegal double third"),
         new CrossingVoicesRule("Crossing voices"),
         new OneDirectionRule("One direction of voices"),
         new ForbiddenJumpRule(false, isFixedBass, isFixedSoprano, "Forbidden voice jump"),
         new CheckDelayCorrectnessRule("Incorrect delay"), //should stand here always
-        new HiddenOctavesRule("Hidden consecutive octaves"),
+        new HiddenOctavesRule("Hidden parallel octaves"),
         new FalseRelationRule("False relation"),
         new SameFunctionCheckConnectionRule("Repeated function voice wrong movement"),
         new DominantSubdominantCheckConnectionRule("Dominant subdominant relation voice wrong movement") //should stand here always
@@ -63,10 +63,10 @@ function AdaptiveChordRulesChecker(punishmentRatios){
             var targetRuleSet = this.punishmentRatios[rulesToAlter[i]] === 1 ? this.hardRules : this.softRules;
             switch (rulesToAlter[i]) {
                 case Consts.CHORD_RULES.ConcurrentOctaves:
-                    targetRuleSet.push(new ConcurrentOctavesRule("Consecutive octaves", this.punishmentRatios[rulesToAlter[i]]));
+                    targetRuleSet.push(new ConcurrentOctavesRule("Parallel octaves", this.punishmentRatios[rulesToAlter[i]]));
                     break;
                 case Consts.CHORD_RULES.ConcurrentFifths:
-                    targetRuleSet.push(new ConcurrentFifthsRule("Consecutive fifths", this.punishmentRatios[rulesToAlter[i]]));
+                    targetRuleSet.push(new ConcurrentFifthsRule("Parallel fifths", this.punishmentRatios[rulesToAlter[i]]));
                     break;
                 case Consts.CHORD_RULES.CrossingVoices:
                     targetRuleSet.push(new CrossingVoicesRule("Crossing voices", this.punishmentRatios[rulesToAlter[i]]));
@@ -78,7 +78,7 @@ function AdaptiveChordRulesChecker(punishmentRatios){
                     targetRuleSet.push(new ForbiddenJumpRule(false, this.isFixedBass, this.isFixedSoprano, "Forbidden voice jump", this.punishmentRatios[rulesToAlter[i]]));
                     break;
                 case Consts.CHORD_RULES.HiddenOctaves:
-                    targetRuleSet.push(new HiddenOctavesRule("Hidden consecutive octaves", this.punishmentRatios[rulesToAlter[i]]));
+                    targetRuleSet.push(new HiddenOctavesRule("Hidden parallel octaves", this.punishmentRatios[rulesToAlter[i]]));
                     break;
                 case Consts.CHORD_RULES.FalseRelation:
                     targetRuleSet.push(new FalseRelationRule("False relation", this.punishmentRatios[rulesToAlter[i]]));

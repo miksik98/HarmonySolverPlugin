@@ -495,26 +495,49 @@ function BassTranslator() {
         return ret
     }
 
-    this.translateDelays = function (delays, revolution) {
+    this.translateDelays = function (delays, revolution, mode, degree) {
         var revNumber = parseInt(revolution[0])
         revNumber -= 1
         var delayNumber
         var delayString
+        var degree1 = degree - 1
+        var baseComponentsSemitonesNumber = {
+            '1' : 0,
+            '2' : 2,
+            '3' : 4,
+            '4' : 5,
+            '5' : 7,
+            '6' : 9,
+            '7' : 10
+        };
+
+        var pitches = mode === Consts.MODE.MAJOR ? new Scale.MajorScale('a').pitches : new Scale.MinorScale('a').pitches
         for (var a = 0; a < delays.length; a++) {
             for (var b = 0; b < delays[a].length; b++) {
                 delayNumber = parseInt(delays[a][b][0])
                 delayNumber += revNumber
                 delayNumber = delayNumber > 9 ? delayNumber - 7 : delayNumber
                 delayString = delays[a][b].length > 1 ? delayNumber + "" + delays[a][b].substring(1) : delayNumber + ""
+                if (b === 0 && delayString.length === 1 && delayNumber !== 8) {
+                    var pitchDifference = Utils.mod(pitches[Utils.mod(delayNumber + degree1 - 1,7)] - pitches[degree1], 12)
+                    if (baseComponentsSemitonesNumber[delayString] > pitchDifference) {
+                        delays[a][b] = delayString + ">"
+                        continue
+                    }
+                    if (baseComponentsSemitonesNumber[delayString] < pitchDifference) {
+                        delays[a][b] = delayString + "<"
+                        continue
+                    }
+                }
                 delays[a][b] = delayString
             }
         }
         return delays
     }
 
-    this.fixDelaysSymbols = function (delays, revolution) {
+    this.fixDelaysSymbols = function (delays, revolution, mode, degree) {
         var ret = this.substituteDelaysSymbols(delays)
-        return this.translateDelays(ret, revolution)
+        return this.translateDelays(ret, revolution, mode, degree)
     }
 
     this.changeDelaysDuringModeChange = function(delays, fromMinorToMajor) {
@@ -605,11 +628,11 @@ function BassTranslator() {
                 revolution = revolution + this.calculateAngleBracketForSpecificNote(mode, key, chordElement.primeNote, 7)
             }
 
-            var delays1 = this.fixDelaysSymbols(delays, revolution)
-
             //var delays1 = this.substituteDelaysSymbols(delays)
 
             var mode1 = !Utils.contains([2, 3, 6], degree) ? IntervalUtils.getThirdMode(key, degree === 7 ? 4 : degree - 1) : mode
+
+            var delays1 = this.fixDelaysSymbols(delays, revolution, mode1, degree)
 
             if (DEBUG) {
                 Utils.log("chordElement", JSON.stringify(chordElement))

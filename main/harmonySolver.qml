@@ -1031,6 +1031,7 @@ MuseScore {
                         text: qsTr("Here you can solve figured bass exercises.\n" +
                                            "At first, open a score with only bass voice and\nfigured bass symbols.\n" +
                                            "Remember to use '#' and 'b' instead of '<' and '>'\nin symbols and delays.\n" +
+                                           "To add figured bass symbols click on note and press ctrl+g\n" +
                                            "For more information like supported symbols,\nplease refer to the manual.")
                         font.pointSize: 12
                         anchors.left: tabRectangle2.left
@@ -1064,10 +1065,10 @@ MuseScore {
                                 isFiguredBassScore()
                                 var ex = read_figured_bass()
                                 var translator = new Translator.BassTranslator()
-                                Utils.log("ex",JSON.stringify(ex))
+                                //Utils.log("ex",JSON.stringify(ex))
 
                                 var exerciseAndBassline = translator.createExerciseFromFiguredBass(ex)
-                                Utils.log("Translated exercise",JSON.stringify(exerciseAndBassline[0]))
+                                //Utils.log("Translated exercise",JSON.stringify(exerciseAndBassline[0]))
 
                                 busyWorker.sendMessage(new SolverRequestDto.SolverRequestDto(
                                     exerciseAndBassline[0],

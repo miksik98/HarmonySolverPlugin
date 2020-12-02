@@ -17,28 +17,29 @@ Rule-based system for solving functional harmony exercises
 
 #### Prerequisites
 
-* Musescore version at least 3.4 (plugin may not work with version 3.3.4 and lower)
+* MuseScore version at least 3.4 (plugin may not work with version 3.3.4 and lower)
 * Windows (this plugin should also work with Linux systems, but it was not fully tested on Linux distributions)
 
 #### Installation step by step
+0. Download plugin - click Code -> Download ZIP. Use archive manager (WinRar, 7zip) to unpack it.<br/><br/>
 
-1. Open MuseScore and go to Edit -> Preferences<br/>
+1. Open MuseScore and go to Edit -> Preferences.<br/><br/>
 ![Alt text](./photos/1.png?raw=true "Title")
 
-2. In tab "General" under "Folders" find path for "Plugins"<br/>
+2. In tab "General" under "Folders" find path for "Plugins".<br/><br/>
 ![Alt text](./photos/2.png?raw=true "Title")
 
-3. Copy whole "harmonySolver" folder to this path<br/>
+3. Copy whole unpacked "HarmonySolverPlugin-master" folder to this path.<br/><br/>
 ![Alt text](./photos/3.png?raw=true "Title")
 
-4. Restart MuseScore and go to Plugins -> Plugin Manager...<br/>
+4. Restart MuseScore and go to Plugins -> Plugin Manager.<br/><br/>
 ![Alt text](./photos/4.png?raw=true "Title")
 
-5. harmonysolver should appear on the left. Tick checkbox next to it and press ok. If harmonysolver is not visible, press "Reload Plugins" button.
-You can also set here keyboard shortcut for harmonysolver<br/>
+5. "harmonySolver" should appear on the left. Tick checkbox next to it and press ok. If harmonySolver is not visible, press "Reload Plugins" button.
+You can also set here keyboard shortcut for harmonySolver (Define Shortcut).<br/><br/>
 ![Alt text](./photos/5.png?raw=true "Title")
 
-6. After that, you can use harmonysolver plugin by clicking Plugins ->HarmonySolver<br/>
+6. After that, you can use harmonysolver plugin by clicking Plugins -> HarmonySolver<br/><br/>
 ![Alt text](./photos/6.png?raw=true "Title")
 
 ## How to use
