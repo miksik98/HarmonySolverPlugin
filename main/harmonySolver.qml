@@ -233,14 +233,18 @@ MuseScore {
         else{
             resources_path = "/resources/lightweight_template_scores/";
         }
+        
+        var solutionPath = configuration.solutionPath
+        
+        if(solutionPath === "") solutionPath = filePath+"/solutions"
 
         readScore(filePath + resources_path + solution.exercise.key + "_"
                   + solution.exercise.mode + ".mscz")
         writeScore(curScore,
-                   filePath + "/solutions/harmonic functions exercise/solution" + taskType + solution_date,
+                   solutionPath + "/solution" + taskType + solution_date,
                    "mscz")
         closeScore(curScore)
-        readScore(filePath + "/solutions/harmonic functions exercise/solution" + taskType
+        readScore(solutionPath + "/solution" + taskType
                   + solution_date + ".mscz")
         if (setDurations) {
             solution.setDurations()
@@ -454,10 +458,6 @@ MuseScore {
             prepare_score_for_solution(filePath, solution, solution_date, false, "_bass")
 
             fill_score_with_solution(solution, ex.durations)
-
-            writeScore(curScore,
-                       filePath + "/solutions/harmonic functions exercise/solution" + solution_date,
-                       "mscz")
         } catch (error) {
             showError(error)
         }
@@ -822,7 +822,6 @@ MuseScore {
                                 var solution_date = get_solution_date()
                                 prepare_score_for_solution(filePath, solution, solution_date, true, "_hfunc")
                                 fill_score_with_solution(solution)
-                                writeScore(curScore, filePath + "/solutions/harmonic functions exercise/solution" + solution_date, "mscz")
                                 buttonRun.enabled = true
                                 harmonicFunctionsProgressBar.value = 0
                             }
@@ -1000,9 +999,6 @@ MuseScore {
                                 Utils.log("Solution:", JSON.stringify(solution))
                                 prepare_score_for_solution(filePath, solution, solution_date, false, "_bass")
                                 fill_score_with_solution(solution, messageObject.durations)
-                                writeScore(curScore,
-                                           filePath + "/solutions/harmonic functions exercise/solution" + solution_date,
-                                           "mscz")
                                 buttonRunFiguredBass.enabled = true
                                 figuredBassProgressBar.value = 0
                             }
@@ -1473,9 +1469,6 @@ MuseScore {
                                     var solution_date = get_solution_date()
                                     prepare_score_for_solution(filePath, solution, solution_date, false, "_soprano")
                                     fill_score_with_solution(solution, messageObject.durations)
-                                    writeScore(curScore,
-                                               filePath + "/solutions/harmonic functions exercise/solution" + solution_date,
-                                               "mscz")
                                 }
                                 buttorSoprano.enabled = true
                                 sopranoProgressBar.value = 0
