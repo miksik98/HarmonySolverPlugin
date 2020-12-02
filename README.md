@@ -39,7 +39,7 @@ Rule-based system for solving functional harmony exercises
 You can also set here keyboard shortcut for harmonySolver (Define Shortcut).<br/><br/>
 ![Alt text](./photos/5.png?raw=true "Title")
 
-6. After that, you can use harmonysolver plugin by clicking Plugins -> HarmonySolver<br/><br/>
+6. After that, you can use harmonySolver plugin by clicking Plugins -> HarmonySolver or using defined shortcut.<br/><br/>
 ![Alt text](./photos/6.png?raw=true "Title")
 
 ## How to use
