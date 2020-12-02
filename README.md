@@ -218,7 +218,7 @@ Remember not to use rests.
 There are also some example scores in folder /examples/soprano.
 
 ### Plugin settings
-You can choose path for solution scores. The default path is ?TODO?.
+You can choose path for solution scores. The default path is /main/solutions.
 
 You can enable printing chord components and chord symbols in solution score.
 What is more plugin has two special components: *prechecker* and *corrector*. 
