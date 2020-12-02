@@ -491,7 +491,7 @@ function harmonicFunctionReconstruct(hf){
     }
     delay = delay.length > 0 ? delay : undefined;
 
-    return new HarmonicFunction(
+    return new HarmonicFunctionWithoutValidation(
         hf.functionName,
         hf.degree,
         hf.position === undefined ? undefined : hf.position.chordComponentString,
