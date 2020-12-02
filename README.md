@@ -156,7 +156,7 @@ Remember not to use rests, ties and more than single delays, plugin does not sup
 
 All alteration in bass symbols should be after the number and should be represented as *b*, *#* and *h*, not "<" or ">".
 
-You can delay up to two numbers, for example "6-4, 5-3". You cannot have delay like "6-".
+You can delay up to two numbers, for example "6b-5, 4-3". You cannot have delay like "6-".
 
 All alteration symbols without number will be applied to 3.
 
