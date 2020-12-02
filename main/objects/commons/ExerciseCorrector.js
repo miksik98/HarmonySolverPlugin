@@ -40,7 +40,7 @@ function ExerciseCorrector(exercise, harmonicFunctions, isDefinedBassLine, sopra
 
     this._handleDominantConnectionsWith7InBass = function(dominantHarmonicFunction, tonicHarmonicFunction) {
         if(isDefinedBassLine)
-            return;
+            return false;
         if(dominantHarmonicFunction.isInDominantRelation(tonicHarmonicFunction) &&
             dominantHarmonicFunction.revolution.baseComponent === "7" &&
             tonicHarmonicFunction.revolution.baseComponent === "1") {
@@ -50,6 +50,7 @@ function ExerciseCorrector(exercise, harmonicFunctions, isDefinedBassLine, sopra
             tonicHarmonicFunction.revolution =
                 IntervalUtils.getThirdMode(key, tonicHarmonicFunction.degree-1) === Consts.MODE.MAJOR ?
                     cm.chordComponentFromString("3") : cm.chordComponentFromString("3>");
+            return Utils.isDefined(tonicHarmonicFunction.delay) && tonicHarmonicFunction.delay.length > 0
         }
         if(dominantHarmonicFunction.isInDominantRelation(tonicHarmonicFunction) &&
             tonicHarmonicFunction.revolution.baseComponent === "7" &&
@@ -60,7 +61,10 @@ function ExerciseCorrector(exercise, harmonicFunctions, isDefinedBassLine, sopra
             dominantHarmonicFunction.revolution =
                 IntervalUtils.getThirdMode(key, dominantHarmonicFunction.degree-1) === Consts.MODE.MAJOR ?
                     cm.chordComponentFromString("3") : cm.chordComponentFromString("3>");
+            return false;
         }
+
+        return false;
     };
 
     this.correctHarmonicFunctions = function() {
@@ -68,7 +72,13 @@ function ExerciseCorrector(exercise, harmonicFunctions, isDefinedBassLine, sopra
         var startIndexOfChain = -1, insideChain = false;
         for(var i=0; i<resultHarmonicFunctions.length;i++){
             if(i < resultHarmonicFunctions.length-1){
-                this._handleDominantConnectionsWith7InBass(resultHarmonicFunctions[i], resultHarmonicFunctions[i+1]);
+                if(this._handleDominantConnectionsWith7InBass(resultHarmonicFunctions[i], resultHarmonicFunctions[i+1])){
+                    var hf = resultHarmonicFunctions[i+2];
+                    var key = hf.key !== undefined ?
+                        hf.key : this.exercise.key;
+                    hf.revolution = IntervalUtils.getThirdMode(key, hf.degree-1) === Consts.MODE.MAJOR ?
+                        hf.cm.chordComponentFromString("3") : hf.cm.chordComponentFromString("3>");
+                }
                 this._handleChopinTonicConnection(resultHarmonicFunctions[i], resultHarmonicFunctions[i+1]);
                 if(resultHarmonicFunctions[i].isInDominantRelation(resultHarmonicFunctions[i+1]) &&
                     resultHarmonicFunctions[i].revolution.baseComponent === "1" &&

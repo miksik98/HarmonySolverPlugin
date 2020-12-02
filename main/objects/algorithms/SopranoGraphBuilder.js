@@ -171,11 +171,11 @@ function SopranoGraphBuilder() {
 
     this.build = function () {
         var graphTemplate = this.getGraphTemplate();
-        generateNestedLayers(graphTemplate, this.innerGenerator, this.outerGeneratorInput);
-        connectNestedLayers(graphTemplate, this.innerEvaluator);
+        generateNestedLayers(graphTemplate, this.innerGenerator, this.outerGeneratorInput); //${counter}
+        connectNestedLayers(graphTemplate, this.innerEvaluator);                            //${counter}
         removeUselessNodesInNestedLayers(graphTemplate);
         removeUnreachableNodesInNestedLayers(graphTemplate);
-        setEdgeWeightsAndPropagate(graphTemplate, this.outerEvaluator);
+        setEdgeWeightsAndPropagate(graphTemplate, this.outerEvaluator);                     //${counter}
 
         removeNodesWithEmptyNestedLayers(graphTemplate)
 
@@ -189,7 +189,7 @@ function SopranoGraphBuilder() {
         if(sopranoGraph.getNodes().length === 2)
             throw new Errors.InvalidGraphConstruction("Cannot find any harmonic function sequence which could be harmonised");
 
-        attachNestedFirstAndLast(sopranoGraph)
+        attachNestedFirstAndLast(sopranoGraph);                                             //${counter}
 
         return sopranoGraph;
     }

@@ -53,18 +53,18 @@ function SopranoSolver(exercise, punishmentRatios){
         }
 
         var dikstra = new Dikstra.Dikstra(sopranoGraph);
-        dikstra.findShortestPaths();
+        dikstra.findShortestPaths();                                //${counter}
         if (LOG_SOLUTION_INFO) console.log("HARMONIC FUNCTION SEQUENCE COST = " + sopranoGraph.getLast().distanceFromBegining)
-        var chordGraph = sopranoGraph.reduceToChordGraph();
+        var chordGraph = sopranoGraph.reduceToChordGraph();         //${counter}
 
         var graphBuilder = new GraphBuilder.GraphBuilder();
         graphBuilder.withEvaluator(innerEvaluator);
         graphBuilder.withGraphTemplate(chordGraph);
-        var innerGraph = graphBuilder.build();
+        var innerGraph = graphBuilder.build();                      //${counter}
 
 
         var dikstra2 = new Dikstra.Dikstra(innerGraph);
-        var sol_nodes = dikstra2.getShortestPathToLastNode();
+        var sol_nodes = dikstra2.getShortestPathToLastNode();       //${counter}
 
         if(sol_nodes.length !== innerGraph.layers.length) {
             throw new Errors.UnexpectedInternalError("Shortest path to last node does not exist");
@@ -75,7 +75,7 @@ function SopranoSolver(exercise, punishmentRatios){
             sol_chords.push(sol_nodes[i].content)
 
         if(LOG_SOLUTION_INFO) console.log("CHORD HARMONIZATION COST = " + sol_nodes[sol_nodes.length-1].distanceFromBegining)
-
+                                                                    //${counter}
         return new ExerciseSolution.ExerciseSolution(this.exercise, sol_nodes[sol_nodes.length-1].distanceFromBegining, sol_chords, true);
     }
 

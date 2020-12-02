@@ -80,7 +80,7 @@ Each measure contains harmonic functions separated by a semicolon.
 Harmonic function must satisfy the scheme: <br/>**X{ extra arguments }**, where 
 X is one of **T** (major tonic), **S** (major subdominant) or **D** (major dominant).
 <br/>You can also use minor harmonic functions: **To** (minor tonic), **So** (minor subdominant),
-**Do** (minor dominant). 
+**Do** (minor dominant).
 
 You can provide also extra arguments for harmonic function. Every argument
 should be inside curly parentheses and be separated from next by slash.
