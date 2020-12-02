@@ -4,13 +4,15 @@ var d = 0
 var D = 17 - 4
 
 WorkerScript.onMessage = function(sopranoSolverRequestDto) {
-
-    var dto = sopranoSolverRequestReconstruct(sopranoSolverRequestDto)
-    var solver = new SopranoSolver(dto.sopranoExercise, dto.punishmentRatios)
-    var solution = solver.solve()
-    sleep(100)
-    WorkerScript.sendMessage({ 'type' : "solution", 'solution': solution, 'durations': dto.sopranoExercise.durations})
-
+    try {
+        var dto = sopranoSolverRequestReconstruct(sopranoSolverRequestDto)
+        var solver = new SopranoSolver(dto.sopranoExercise, dto.punishmentRatios)
+        var solution = solver.solve()
+        sleep(100)
+        WorkerScript.sendMessage({ 'type' : "solution", 'solution': solution, 'durations': dto.sopranoExercise.durations})
+    } catch (e) {
+        WorkerScript.sendMessage({ 'type' : "error", 'error': e})
+    }
 }
 
 function sleep(millis){
@@ -866,18 +868,20 @@ function SopranoRulesChecker(key, mode, punishmentRatios){
             new ChordRulesChecker(false,true),
             new ChordGenerator(this.key,this.mode)),
         new SecondaryDominantConnectionRule(this.key),
-        new Revolution5Rule()
+        new Revolution5Rule(),
+        new DownAndNotDownRule(),
+        new DegreeRule()
     ];
     this.softRules = [
+        new HarmonicFunctionRelationRule(),
         new FourthChordsRule(),
-        new DominantRelationRule(),
         new ChangeFunctionConnectionRule(),
         new JumpRule(),
-        new SecondRelationRule(),
         new ChangeFunctionOnDownBeatRule(),
         new ChangeFunctionAtMeasureBeginningRule(),
-        new RevolutionOneShouldBe1(),
-        new SopranoShouldBeDoubled()
+        new PreferNeapolitanRule(),
+        new SopranoShouldBeDoubled(),
+        new PreferTriadRule()
         ];
 }
 
@@ -912,6 +916,17 @@ function ExistsSolutionRule(chordRulesChecker, chordGenerator){
     }
 }
 
+function DownAndNotDownRule(){
+    IRule.call(this);
+    this.evaluate = function(connection){
+        if(connection.prev.harmonicFunction.down !== connection.current.harmonicFunction.down &&
+            connection.prev.harmonicFunction.degree === connection.current.harmonicFunction.degree &&
+            connection.prev.harmonicFunction.key === connection.current.harmonicFunction.degree)
+            return -1;
+        return 0;
+    }
+}
+
 function SpecialConnectionRule(punishment, prevFunctionName, currentFunctionName){
     IRule.call(this);
     this.currentFunctionName = currentFunctionName;
@@ -919,7 +934,7 @@ function SpecialConnectionRule(punishment, prevFunctionName, currentFunctionName
     this.evaluate = function(connection){
         var newConnection = this.translateConnectionIncludingDeflections(connection);
         if(!isDefined(newConnection))
-            return 0;
+            return 0    //prevFunctionName === FUNCTION_NAMES.DOMINANT ? -1 : 0;
         if(newConnection.current.harmonicFunction.functionName === this.currentFunctionName &&
             newConnection.prev.harmonicFunction.functionName === this.prevFunctionName){
                 return punishment;
@@ -984,6 +999,53 @@ function ForbiddenDSConnectionRule(){
     }
 }
 
+function HarmonicFunctionRelationRule(){
+    IRule.call(this);
+
+    this.allSubRulesBroken = true;
+    this.subRules = [
+        new DominantRelationRule(),
+        new SecondRelationRule(),
+        new SubdominantRelationRule()
+    ];
+
+    this.evaluate = function(connection){
+        if(connection.current.harmonicFunction.equals(connection.prev.harmonicFunction))
+            return 5;
+        var evaluationResult = this.evaluateSubRules(connection);
+        if(this.allSubRulesBroken){
+            return 70;
+        }
+        return evaluationResult;
+    };
+
+    this.evaluateSubRules = function(connection){
+        var evaluationResult = 0;
+        for(var i = 0; i < this.subRules.length; i++) {
+            var currentResult = this.subRules[i].evaluate(connection);
+            if(currentResult < 10) {
+                this.allSubRulesBroken = false;
+                return currentResult;
+            }
+            evaluationResult += currentResult;
+        }
+        return evaluationResult;
+    };
+}
+
+function SubdominantRelationRule(){
+    IRule.call(this);
+    this.evaluate = function(connection){
+        if(connection.prev.harmonicFunction.isInSubdominantRelation(connection.current.harmonicFunction)){
+            if(connection.prev.harmonicFunction.key !== connection.current.harmonicFunction.key){
+                return 2;
+            } else
+                return 0;
+        }
+        return 4;
+    }
+}
+
 function DominantRelationRule(){
     IRule.call(this);
     this.evaluate = function(connection){
@@ -993,7 +1055,9 @@ function DominantRelationRule(){
             } else
                 return 0;
         }
-        return 9;
+        if(connection.current.harmonicFunction.degree === 1)
+            return 50;
+        return 15;
     }
 }
 
@@ -1036,9 +1100,9 @@ function JumpRule(){
         var sameFunctionRule = new NotChangeFunctionRule();
         var ruleIsNotBroken = sameFunctionRule.isNotBroken(connection);
         if(pitchOffsetBetween(connection.current.sopranoNote, connection.prev.sopranoNote) > 2){
-             return ruleIsNotBroken ? 0 : 5;
+             return ruleIsNotBroken ? 0 : 10;
         }
-        return ruleIsNotBroken ? 5 : 0;
+        return ruleIsNotBroken ? 10 : 0;
     }
 }
 
@@ -1047,7 +1111,7 @@ function ChangeFunctionOnDownBeatRule(){
     this.evaluate = function(connection){
         var sameFunctionRule = new NotChangeFunctionRule();
         if(sameFunctionRule.isBroken(connection) && connection.current.measurePlace === MEASURE_PLACE.UPBEAT){
-            return 10;
+            return 5;
         }
         return 0;
     }
@@ -1072,7 +1136,8 @@ function SecondaryDominantConnectionRule(key) {
 function FourthChordsRule(){
     IRule.call(this);
     this.evaluate = function (connection) {
-        if(connection.current.harmonicFunction.countChordComponents() === 3){
+        if(connection.current.harmonicFunction.countChordComponents() === 3 &&
+            contains([1,4,5], connection.current.harmonicFunction.degree)){
             return 8;
         }
         return 0;
@@ -1090,18 +1155,14 @@ function Revolution5Rule(){
     }
 }
 
-function RevolutionOneShouldBe1(){
+function PreferNeapolitanRule(){
     IRule.call(this);
     this.evaluate = function (connection) {
-        if(connection.current.harmonicFunction.revolution !== connection.current.harmonicFunction.getPrime() ||
-            connection.prev.harmonicFunction.revolution !== connection.prev.harmonicFunction.getPrime()){
-            return 4;
-        }
-        if(connection.current.harmonicFunction.revolution === connection.current.harmonicFunction.getPrime() &&
-            connection.prev.harmonicFunction.revolution === connection.prev.harmonicFunction.getPrime()){
-            return 1;
-        }
-        return 0;
+        if(connection.current.harmonicFunction.degree !== 2)
+            return 0;
+        if(connection.current.harmonicFunction.isNeapolitan())
+            return 0;
+        return 1;
     }
 }
 
@@ -1109,7 +1170,29 @@ function SopranoShouldBeDoubled(){
     IRule.call(this);
     this.evaluate = function (connection) {
         if(connection.current.harmonicFunction.position !== connection.current.harmonicFunction.revolution)
-            return 1;
+            return 3;
+        return 0;
+    }
+}
+
+function PreferTriadRule(){
+    IRule.call(this);
+    this.evaluate = function (connection) {
+        if(contains([1,4,5],connection.current.harmonicFunction.degree))
+            return 0;
+        return 5;
+    }
+}
+
+function DegreeRule(){
+    IRule.call(this);
+    this.evaluate = function (connection) {
+        if(connection.current.harmonicFunction.degree === connection.prev.harmonicFunction.degree &&
+            connection.current.harmonicFunction.functionName !== connection.prev.harmonicFunction.functionName)
+            return -1;
+        if(connection.current.harmonicFunction.functionName === connection.prev.harmonicFunction.functionName &&
+            connection.current.harmonicFunction.degree !== connection.prev.harmonicFunction.degree)
+            return -1;
         return 0;
     }
 }
@@ -2457,14 +2540,14 @@ function ChordRulesChecker(isFixedBass, isFixedSoprano){
     this.isFixedSoprano = isFixedSoprano;
 
     this.hardRules = [
-        new ConcurrentOctavesRule("Consecutive octaves"),
-        new ConcurrentFifthsRule("Consecutive fifths"),
+        new ConcurrentOctavesRule("Parallel octaves"),
+        new ConcurrentFifthsRule("Parallel fifths"),
         new IllegalDoubledThirdRule("Illegal double third"),
         new CrossingVoicesRule("Crossing voices"),
         new OneDirectionRule("One direction of voices"),
         new ForbiddenJumpRule(false, isFixedBass, isFixedSoprano, "Forbidden voice jump"),
         new CheckDelayCorrectnessRule("Incorrect delay"), //should stand here always
-        new HiddenOctavesRule("Hidden consecutive octaves"),
+        new HiddenOctavesRule("Hidden parallel octaves"),
         new FalseRelationRule("False relation"),
         new SameFunctionCheckConnectionRule("Repeated function voice wrong movement"),
         new DominantSubdominantCheckConnectionRule("Dominant subdominant relation voice wrong movement") //should stand here always
@@ -2495,7 +2578,8 @@ function AdaptiveChordRulesChecker(punishmentRatios){
         new SopranoBestLineRule("Soprano line should not contain big jumps"),
         new DominantRelationCheckConnectionRule("Dominant relation voice wrong movement"),
         new DominantSecondRelationCheckConnectionRule("Dominant second relation voice wrong movement"),
-        new SubdominantDominantCheckConnectionRule("Subdominant Dominant relation voice wrong movement")
+        new SubdominantDominantCheckConnectionRule("Subdominant Dominant relation voice wrong movement"),
+        new ClosestMoveInBassRule(true, "Not closest move in bass")
     ];
 
     this.addPunishmentRatiosToRules = function() {
@@ -2505,10 +2589,10 @@ function AdaptiveChordRulesChecker(punishmentRatios){
             var targetRuleSet = this.punishmentRatios[rulesToAlter[i]] === 1 ? this.hardRules : this.softRules;
             switch (rulesToAlter[i]) {
                 case CHORD_RULES.ConcurrentOctaves:
-                    targetRuleSet.push(new ConcurrentOctavesRule("Consecutive octaves", this.punishmentRatios[rulesToAlter[i]]));
+                    targetRuleSet.push(new ConcurrentOctavesRule("Parallel octaves", this.punishmentRatios[rulesToAlter[i]]));
                     break;
                 case CHORD_RULES.ConcurrentFifths:
-                    targetRuleSet.push(new ConcurrentFifthsRule("Consecutive fifths", this.punishmentRatios[rulesToAlter[i]]));
+                    targetRuleSet.push(new ConcurrentFifthsRule("Parallel fifths", this.punishmentRatios[rulesToAlter[i]]));
                     break;
                 case CHORD_RULES.CrossingVoices:
                     targetRuleSet.push(new CrossingVoicesRule("Crossing voices", this.punishmentRatios[rulesToAlter[i]]));
@@ -2520,7 +2604,7 @@ function AdaptiveChordRulesChecker(punishmentRatios){
                     targetRuleSet.push(new ForbiddenJumpRule(false, this.isFixedBass, this.isFixedSoprano, "Forbidden voice jump", this.punishmentRatios[rulesToAlter[i]]));
                     break;
                 case CHORD_RULES.HiddenOctaves:
-                    targetRuleSet.push(new HiddenOctavesRule("Hidden consecutive octaves", this.punishmentRatios[rulesToAlter[i]]));
+                    targetRuleSet.push(new HiddenOctavesRule("Hidden parallel octaves", this.punishmentRatios[rulesToAlter[i]]));
                     break;
                 case CHORD_RULES.FalseRelation:
                     targetRuleSet.push(new FalseRelationRule("False relation", this.punishmentRatios[rulesToAlter[i]]));
@@ -2796,10 +2880,10 @@ function FalseRelationRule(details, evaluationRatio){
         if(prevVoice === 0 || currentVoice === 0)
             return true;
         //given soprano, couldn't avoid false relation
-        if(prevVoice === 3 || currentVoice === 3){
-            if(isDefined(prevChord.harmonicFunction.position) && isDefined(currentChord.harmonicFunction.position))
-                return true;
-        }
+        // if(prevVoice === 3 || currentVoice === 3){
+        //     if(isDefined(prevChord.harmonicFunction.position) && isDefined(currentChord.harmonicFunction.position))
+        //         return true;
+        // }
         return false;
     }
 }
@@ -2962,15 +3046,43 @@ function ClosestMoveRule(details){
                 if(j !== i){
                     for(var currentPitch=currentChord.notes[j].pitch; currentPitch<vb.sopranoMax; currentPitch += 12){
                         if(currentPitch < higherPitch && currentPitch > lowerPitch){
-                            return 5;
+                            return 10;
                         }
                     }
                     for(var currentPitch=currentChord.notes[j].pitch; currentPitch<vb.tenorMin; currentPitch -= 12){
                         if(currentPitch < higherPitch && currentPitch > lowerPitch){
-                            return 5;
+                            return 10;
                         }
                     }
                 }
+            }
+        }
+        return 0;
+    };
+}
+
+function ClosestMoveInBassRule(isFixedSoprano, details){
+    IRule.call(this, details);
+
+    this.isFixedSoprano = isFixedSoprano;
+
+    this.evaluate = function(connection) {
+        if(!this.isFixedSoprano)
+            return 0;
+        var currentChord = connection.current;
+        var prevChord = connection.prev;
+        var bassPitch = currentChord.bassNote.pitch;
+        var prevBassPitch = prevChord.bassNote.pitch;
+        var offset = abs(bassPitch - prevBassPitch);
+
+        for(var i = 1; i < 4; i++){
+            var pitch = currentChord.notes[i].pitch;
+            if(contains(currentChord.harmonicFunction.getBasicChordComponents(), currentChord.notes[i].chordComponent) &&
+                currentChord.harmonicFunction.revolution !== currentChord.notes[i].chordComponent){
+                while(abs(prevBassPitch - pitch) >= 12)
+                    pitch -= 12;
+                if(abs(pitch - prevBassPitch) < offset)
+                    return 50;
             }
         }
         return 0;
@@ -2990,12 +3102,12 @@ function DoublePrimeOrFifthRule(details) {
         //double soprano component
         if(currentChord.harmonicFunction.revolution.chordComponentString === "1"){
             if(currentChord.countBaseComponents(currentChord.sopranoNote.chordComponent.baseComponent) === 1)
-                return 3;
+                return 2;
         }
         //double fifth if revolution === fifth
         if(currentChord.harmonicFunction.revolution.chordComponentString === currentChord.harmonicFunction.getFifth()){
             if(currentChord.countBaseComponents(currentChord.harmonicFunction.getFifth()) === 1)
-                return 3;
+                return 2;
         }
         return 0;
     }
@@ -3010,7 +3122,7 @@ function SopranoBestLineRule(details){
         var prevChord = connection.prev;
 
         if(pitchOffsetBetween(prevChord.sopranoNote, currentChord.sopranoNote) > 4)
-            return 2;
+            return 3;
         return 0;
     }
 }
@@ -3959,7 +4071,7 @@ function translateToOldNotation(lines) {
 }
 
 function parse(input) {
-    input = input.replace(/\r/g,"")
+    input = input.replace(/[ \t\r]+/g,"")
 
     if (input === undefined || input === "") {
         throw new HarmonicFunctionsParserError("Exercise is empty")
@@ -4156,7 +4268,7 @@ function ExerciseCorrector(exercise, harmonicFunctions, isDefinedBassLine, sopra
 
     this._handleDominantConnectionsWith7InBass = function(dominantHarmonicFunction, tonicHarmonicFunction) {
         if(isDefinedBassLine)
-            return;
+            return false;
         if(dominantHarmonicFunction.isInDominantRelation(tonicHarmonicFunction) &&
             dominantHarmonicFunction.revolution.baseComponent === "7" &&
             tonicHarmonicFunction.revolution.baseComponent === "1") {
@@ -4166,6 +4278,7 @@ function ExerciseCorrector(exercise, harmonicFunctions, isDefinedBassLine, sopra
             tonicHarmonicFunction.revolution =
                 getThirdMode(key, tonicHarmonicFunction.degree-1) === MODE.MAJOR ?
                     cm.chordComponentFromString("3") : cm.chordComponentFromString("3>");
+            return isDefined(tonicHarmonicFunction.delay) && tonicHarmonicFunction.delay.length > 0
         }
         if(dominantHarmonicFunction.isInDominantRelation(tonicHarmonicFunction) &&
             tonicHarmonicFunction.revolution.baseComponent === "7" &&
@@ -4176,7 +4289,10 @@ function ExerciseCorrector(exercise, harmonicFunctions, isDefinedBassLine, sopra
             dominantHarmonicFunction.revolution =
                 getThirdMode(key, dominantHarmonicFunction.degree-1) === MODE.MAJOR ?
                     cm.chordComponentFromString("3") : cm.chordComponentFromString("3>");
+            return false;
         }
+
+        return false;
     };
 
     this.correctHarmonicFunctions = function() {
@@ -4184,7 +4300,13 @@ function ExerciseCorrector(exercise, harmonicFunctions, isDefinedBassLine, sopra
         var startIndexOfChain = -1, insideChain = false;
         for(var i=0; i<resultHarmonicFunctions.length;i++){
             if(i < resultHarmonicFunctions.length-1){
-                this._handleDominantConnectionsWith7InBass(resultHarmonicFunctions[i], resultHarmonicFunctions[i+1]);
+                if(this._handleDominantConnectionsWith7InBass(resultHarmonicFunctions[i], resultHarmonicFunctions[i+1])){
+                    var hf = resultHarmonicFunctions[i+2];
+                    var key = hf.key !== undefined ?
+                        hf.key : this.exercise.key;
+                    hf.revolution = getThirdMode(key, hf.degree-1) === MODE.MAJOR ?
+                        hf.cm.chordComponentFromString("3") : hf.cm.chordComponentFromString("3>");
+                }
                 this._handleChopinTonicConnection(resultHarmonicFunctions[i], resultHarmonicFunctions[i+1]);
                 if(resultHarmonicFunctions[i].isInDominantRelation(resultHarmonicFunctions[i+1]) &&
                     resultHarmonicFunctions[i].revolution.baseComponent === "1" &&
@@ -4579,7 +4701,7 @@ function Node(content, nextNeighbours, prevNodes) {
 
 var DEBUG = false;
 
-function HarmonicFunction2(params){
+function HarmonicFunction2(params, notValidate){
     // Properties:
     // functionName          "T", "S", "D"
     // degree               int
@@ -4726,6 +4848,15 @@ function HarmonicFunction2(params){
         return false;
     };
 
+    this.isInSubdominantRelation = function (nextFunction) {
+        if(this.key !== nextFunction.key && isDefined(this.key)){
+            return contains([-4, 3], this.degree - 1);
+        }
+        if(this.key === nextFunction.key)
+            return contains([-4,3], this.degree - nextFunction.degree);
+        return false;
+    };
+
     this.isInDominantRelation = function (nextFunction) {
         if(this.down !== nextFunction.down && this.key === nextFunction.key && !(this.functionName === FUNCTION_NAMES.TONIC
             && this.degree === 6
@@ -4845,7 +4976,7 @@ function HarmonicFunction2(params){
 
     this.copy = function copy(){
         var args = this.getArgsMap();
-        return new HarmonicFunction2(args);
+        return new HarmonicFunction2(args, true);
     }
 
     this.equals = function (other) {
@@ -5004,7 +5135,7 @@ function HarmonicFunction2(params){
     }
 // *****CONSTUCTOR PART 2 END*****
 
-    if(DEBUG) {
+    if(!isDefined(notValidate)) {
         var validator = new HarmonicFunctionValidator();
         validator.validate(this);
     }
@@ -5029,6 +5160,24 @@ function HarmonicFunction(functionName, degree, position, revolution, delay, ext
     HarmonicFunction2.call(this, args);
 }
 
+function HarmonicFunctionWithoutValidation(functionName, degree, position, revolution, delay, extra, omit, down, system, mode, key, isRelatedBackwards){
+    var args = {
+        "functionName" : functionName,
+        "degree" : degree,
+        "position" : position,
+        "revolution" : revolution,
+        "delay" : delay,
+        "extra" : extra,
+        "omit" : omit,
+        "down" : down,
+        "system" : system,
+        "mode" : mode,
+        "key" : key,
+        "isRelatedBackwards" : isRelatedBackwards
+    };
+    HarmonicFunction2.call(this, args, true);
+}
+
 function harmonicFunctionReconstruct(hf){
     var delay = []
     for(var i=0;i<hf.delay.length; i++){
@@ -5036,7 +5185,7 @@ function harmonicFunctionReconstruct(hf){
     }
     delay = delay.length > 0 ? delay : undefined;
 
-    return new HarmonicFunction(
+    return new HarmonicFunctionWithoutValidation(
         hf.functionName,
         hf.degree,
         hf.position === undefined ? undefined : hf.position.chordComponentString,
@@ -5483,7 +5632,7 @@ function HarmonicFunctionValidator(){
             //too large difference in delay
             var chordComponentManager = new ChordComponentManager();
 
-            if(abs(parseInt(first.baseComponent) - parseInt(second.baseComponent)) !== 1 ) handleValidationFailure(_this, "To large difference in delay");
+            if(abs(parseInt(first.baseComponent) - parseInt(second.baseComponent)) > 1 )  handleValidationFailure(_this, "To large difference in delay");
             // todo to many chord components!
             //todo cannot omit component used in delay, position, resolution, extra
 
@@ -5512,7 +5661,9 @@ function HarmonicFunctionValidator(){
 
         for(var i=0; i<omit.length; i++){
             if(!isValidChordComponent(omit[i])) handleValidationFailure(_this, "Invalid chordComponentString of omit [" + i + "]");
-            if(!contains(_this.harmonicFunction.getBasicChordComponents(), omit[i])) handleValidationFailure(_this, "Omit contains not basic chord component which is not allowed here");
+            if(!contains(_this.harmonicFunction.getBasicChordComponents(), omit[i]) && omit[i].chordComponentString !== "8") {
+                handleValidationFailure(_this, "Omit contains not basic chord component which is not allowed here");
+            }
 
             if(omit.length === 2 && omit[0] === omit[1]) handleValidationFailure(_this, "Omit contains duplicates");
         }

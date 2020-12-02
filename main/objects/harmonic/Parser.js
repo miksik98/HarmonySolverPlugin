@@ -352,7 +352,7 @@ function translateToOldNotation(lines) {
 }
 
 function parse(input) {
-    input = input.replace(/\r/g,"")
+    input = input.replace(/[ \t\r]+/g,"")
 
     if (input === undefined || input === "") {
         throw new Errors.HarmonicFunctionsParserError("Exercise is empty")
