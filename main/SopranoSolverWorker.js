@@ -5424,7 +5424,7 @@ function checkForImpossibleConnections(harmonicFunctions, chordGenerator, bassLi
                 throw new PreCheckerError("Could not find valid connection between chords " + (indexes[i - 1]) + " and " + (indexes[i]),
                     "\nChord " + (indexes[i - 1])+ "\n" + (DEBUG ? JSON.stringify(harmonicFunctions[i - 1]) : harmonicFunctions[i - 1].toString())
                     + "\nChord " + (indexes[i]) + "\n" + (DEBUG ? JSON.stringify(harmonicFunctions[i]) : harmonicFunctions[i].toString())
-                        + "\nBroken rules:\n" + brokenRulesStringInfo)
+                        + "\nBroken rules for all " + allConnections + " possible connections between these chords:\n" + brokenRulesStringInfo)
             } else {
                 throw new PreCheckerError("Could not generate any correct chord for first chord",
                     (DEBUG ? JSON.stringify(harmonicFunctions[i]) : harmonicFunctions[i].toString())
