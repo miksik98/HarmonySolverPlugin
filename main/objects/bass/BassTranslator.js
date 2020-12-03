@@ -197,7 +197,10 @@ function BassTranslator() {
             }
         }
 
-        throw new Errors.FiguredBassInputError("Invalid bass symbols:", bassNumbers)
+        return bassNumbers.sort(function (a, b) {
+            return (a > b) ? 1 : -1
+        })
+        //throw new Errors.FiguredBassInputError("Invalid bass symbols:", bassNumbers)
     }
 
     this.completeFiguredBassSymbol = function (element) {
@@ -282,16 +285,14 @@ function BassTranslator() {
                 }
                 chordElement.notesNumbers = temp
                 if (chordElement.notesNumbers.length >= 5) {
-                    //nothing?
-                    //chordElement.omit.push(Utils.mod((chordElement.notesNumbers[chordElement.notesNumbers.length - 1]), 7) + 1)
+                    chordElement.omit.push(Utils.mod((chordElement.notesNumbers[chordElement.notesNumbers.length - 1]), 7) + 1)
                 }
                 return
             }
         }
         chordElement.notesNumbers.push(chordElement.notesNumbers[chordElement.notesNumbers.length - 1] + 2)
         if (chordElement.notesNumbers.length >= 5) {
-            //nothing?
-            //      chordElement.omit.push(Utils.mod((chordElement.notesNumbers[chordElement.notesNumbers.length - 1]), 7) + 1)
+            chordElement.omit.push(Utils.mod((chordElement.notesNumbers[chordElement.notesNumbers.length - 1]), 7) + 1)
         }
     }
 
