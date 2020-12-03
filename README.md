@@ -160,7 +160,7 @@ You can delay up to two numbers, for example "6b-5, 4-3". You cannot have delay 
 
 All alteration symbols without number will be applied to 3.
 
-Here is a table with all supported number bass symbols with their translations:
+Here is a table with all supported number bass symbols with their translations (you can also use other symbols and combinations, but they may not be handled correctly):
 
 | Input symbols | How they will be treated |
 |:-------------:|:-------------:|
