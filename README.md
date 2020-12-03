@@ -156,7 +156,7 @@ Remember not to use rests, ties and more than single delays, plugin does not sup
 
 All alteration in bass symbols should be after the number and should be represented as *b*, *#* and *h*, not "<" or ">".
 
-You can delay up to two numbers, for example "6-4, 5-3". You cannot have delay like "6-".
+You can delay up to two numbers, for example "6b-5, 4-3". You cannot have delay like "6-".
 
 All alteration symbols without number will be applied to 3.
 
@@ -215,6 +215,8 @@ List of basic rules:
 
 Before you will click *Solve*, you should open a score with only soprano voice.
 Remember not to use rests.
+
+Each note of melody will be harmonized. The number of chords will be equal to number of notes.
 
 There are also some example scores in folder /examples/soprano.
 
