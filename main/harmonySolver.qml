@@ -4,7 +4,6 @@ import FileIO 3.0
 import QtQuick.Dialogs 1.2
 import QtQuick.Controls 1.4
 
-//import "./qml_components"
 import "./objects/harmonic/Parser.js" as Parser
 import "./objects/bass/FiguredBass.js" as FiguredBass
 import "./objects/model/Note.js" as Note
@@ -713,14 +712,14 @@ MuseScore {
         title: "Help - Harmonic Functions"
         text: "Here you can solve Harmonic Functions exercises.\n" +
         "You can type in exercise or load it with 'Import file' button.\nAfter importing, exercise is editable in the text area.\n"+
-        "With button 'Check input' you can check if input is correct."
+        "With button 'Check notation' you can check if input is correct."
         //detailedText: "Detailed text test"
         icon: StandardIcon.Question
         standardButtons: StandardButton.Ok
     }
 
 
-/*    MessageDialog {
+    MessageDialog {
         id: helpBassDialog
         width: 800
         height: 600
@@ -732,7 +731,7 @@ MuseScore {
         icon: StandardIcon.Information
         standardButtons: StandardButton.Ok
     }
-*/
+
 
     MessageDialog {
         id: helpSopranoDialog
@@ -861,6 +860,7 @@ MuseScore {
                         anchors.top: tabRectangle1.top
                         anchors.leftMargin: 10
                         anchors.topMargin: 10
+                        color: "#000000"
                     }
 
                     TextArea {
@@ -909,7 +909,7 @@ MuseScore {
 
                     Button {
                         id: buttonParse
-                        text: qsTr("Check input")
+                        text: qsTr("Check notation")
                         anchors.bottom: tabRectangle1.bottom
                         anchors.left: buttonOpenFile.right
                         anchors.topMargin: 10
@@ -996,7 +996,7 @@ MuseScore {
                             else if(messageObject.type === "solution"){
                                 var solution = ExerciseSolution.exerciseSolutionReconstruct(messageObject.solution);
                                 var solution_date = get_solution_date()
-                                Utils.log("Solution:", JSON.stringify(solution))
+//                                Utils.log("Solution:", JSON.stringify(solution))
                                 prepare_score_for_solution(filePath, solution, solution_date, false, "_bass")
                                 fill_score_with_solution(solution, messageObject.durations)
                                 buttonRunFiguredBass.enabled = true
@@ -1009,7 +1009,7 @@ MuseScore {
                             }
                         }
                      }
-/*
+
                     Button {
                         id: buttonBassHelp
                         text: qsTr("?")
@@ -1024,22 +1024,19 @@ MuseScore {
                         }
                         tooltip: "Help"
                     }
-*/
-                    Label {
-                        id: bassInfoLabel
-                        wrapMode: Text.WordWrap
-                        text: qsTr("Here you can solve figured bass exercises.\n" +
-                                           "At first, open a score with only bass voice and\nfigured bass symbols.\n" +
-                                           "Remember to use '#' and 'b' instead of '<' and '>'\nin symbols and delays.\n" +
-                                           "To add figured bass symbols click on note and press ctrl+g\n" +
-                                           "For more information like supported symbols,\nplease refer to the manual.")
-                        font.pointSize: 12
-                        anchors.left: tabRectangle2.left
-                        anchors.top: tabRectangle2.top
-                        anchors.leftMargin: 10
-                        anchors.topMargin: 10
-                    }
-
+                 
+                        Label {
+                            id: bassInfoLabel
+                            wrapMode: Text.WordWrap
+                            text: qsTr("Remember:\nClick on a note and use shortcut ctrl+G to add figured bass symbol to the bass note.")
+                            font.pointSize: 12
+                            anchors.left: tabRectangle2.left
+                            anchors.top: tabRectangle2.top
+                            anchors.leftMargin: 10
+                            anchors.topMargin: 10
+                            color: "#000000"
+                        }
+                    
                     ProgressBar {
                         id: figuredBassProgressBar
                         value: 0
@@ -1182,17 +1179,17 @@ MuseScore {
                             CheckBox {
                                 checked: true
                                 enabled: false
-                                text: qsTr("T")
+                                text: "<font color='#000000'>T</font>"
                             }
                             CheckBox {
                                 checked: true
                                 enabled: false
-                                text: qsTr("S")
+                                text: "<font color='#000000'>S</font>"
                             }
                             CheckBox {
                                 checked: true
                                 enabled: false
-                                text: qsTr("D")
+                                text: "<font color='#000000'>D</font>"
                             }
                         }
 
@@ -1205,22 +1202,22 @@ MuseScore {
                             CheckBox {
                                 id: s6Checkbox
                                 checked: false
-                                text: qsTr("S6")
+                                text: "<font color='#000000'>S6</font>"
                             }
                             CheckBox {
                                 id: d7Checkbox
                                 checked: false
-                                text: qsTr("D7")
+                                text: "<font color='#000000'>D7</font>"
                             }
                             CheckBox {
                                 id: neapolitanCheckbox
                                 checked: false
-                                text: qsTr("neapolitan chord")
+                                text: "<font color='#000000'>neapolitan chord</font>"
                             }
                             CheckBox {
                                 id: secondaryDCheckbox
                                 checked: false
-                                text: qsTr("secondary dominants")
+                                text: "<font color='#000000'>secondary dominants</font>"
                             }
                         }
 
@@ -1233,23 +1230,23 @@ MuseScore {
                             CheckBox {
                                 id: degree2Checkbox
                                 checked: false
-                                text: qsTr("II")
+                                text: "<font color='#000000'>II</font>"
 
                             }
                             CheckBox {
                                 id: degree3Checkbox
                                 checked: false
-                                text: qsTr("III")
+                                text: "<font color='#000000'>III</font>"
                             }
                             CheckBox {
                                 id: degree6Checkbox
                                 checked: false
-                                text: qsTr("VI")
+                                text: "<font color='#000000'>VI</font>"
                             }
                             CheckBox {
                                 id: degree7Checkbox
                                 checked: false
-                                text: qsTr("VII")
+                                text: "<font color='#000000'>VII</font>"
                             }
                         }
 
@@ -1262,12 +1259,12 @@ MuseScore {
                             CheckBox {
                                 id: revolution3Checkbox
                                 checked: false
-                                text: qsTr("3")
+                                text: "<font color='#000000'>3</font>"
                             }
                             CheckBox {
                                 id: revolution5Checkbox
                                 checked: false
-                                text: qsTr("5")
+                                text: "<font color='#000000'>5</font>"
                             }
                         }
 
@@ -1281,12 +1278,12 @@ MuseScore {
                             RadioButton {
                                 id: useMajorCheckbox
                                 checked: true
-                                text: qsTr("major")
+                                text: "<font color='#000000'>major</font>"
                                 exclusiveGroup: scaleGroup
                             }
                             RadioButton {
                                 id: useMinorCheckbox
-                                text: qsTr("minor")
+                                text: "<font color='#000000'>minor</font>"
                                 exclusiveGroup: scaleGroup
                             }
                         }
@@ -1561,6 +1558,7 @@ MuseScore {
                         anchors.topMargin: 10
                         anchors.leftMargin: 15
                         text: qsTr("Solutions save path")
+                        color: "#000000"
                     }
 
                     TextField {
@@ -1609,7 +1607,7 @@ MuseScore {
                         CheckBox {
                             id: printCheckbox
                             checked: configuration.enableChordSymbolsPrinting
-                            text: qsTr("print chord symbols")
+                            text: "<font color='#000000'>print chord symbols</font>"
                             tooltip: "Enable printing chord symbols under the chords in score"
                             onCheckedChanged: function() {
                                     if (this.checkedState === Qt.Checked){
@@ -1626,7 +1624,7 @@ MuseScore {
                         CheckBox {
                              id: printComponentsCheckbox
                              checked: configuration.enableChordComponentsPrinting
-                             text: qsTr("print chord components")
+                             text: "<font color='#000000'>print chord components</font>"
                              tooltip: "Enable printing chord components next to every note"
                              onCheckedChanged: function() {
                                     if (this.checkedState === Qt.Checked){
@@ -1643,7 +1641,7 @@ MuseScore {
                         CheckBox {
                             id: precheckCheckbox
                             checked: configuration.enablePrechecker
-                            text: qsTr("precheck for unavoidable errors")
+                            text: "<font color='#000000'>precheck for unavoidable errors</font>"
                             tooltip: "Enables additional step of solving - preckeck.\n" + 
                             "During precheck plugin checks connections between all chords.\n" + 
                             "If there is some problem, plugin will wand you about that giving chords position,\n" + 
@@ -1664,11 +1662,11 @@ MuseScore {
                         CheckBox {
                              id: correctCheckbox
                              checked: configuration.enableCorrector
-                             text: qsTr("correct given exercise")
+                             text: "<font color='#000000'>correct given exercise</font>"
                              tooltip: "Enable exercise correction by tweaking chords revolution and omit parameters\n"
                               + "to avoid breaking harmonic rules." +
                               "\nFor example " +
-                             "adds omit 5 to tonic after chopin chord if user do not specify it to avoid parallel fifths."
+                             "adds 3 to revolution after chord with 7 in bass."
                              onCheckedChanged: function() {
                                     if (this.checkedState === Qt.Checked){
                                           configuration.enableCorrector = true

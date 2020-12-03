@@ -236,7 +236,7 @@ function convertPitchToOneOctave(pitch){
 
 function isIntegerNumber(x){
     var xString = x+"";
-    var match = xString.match(/0|([1-9]\d*)/gi);
+    var match = xString.match(/^(0|([1-9]\d*))$/gi);
     if(match === null)
         return false;
     return x !== xString && match.length === 1 && match[0] === xString
@@ -1472,7 +1472,9 @@ function ExerciseSolution(exercise, rating, chords, success) {
                     last = 1
                 }
             }
-            return last === 0 ? back + 1 : front
+            if (front === 0)
+                return 1
+            return front
         }
 
         function divide_fun_changed(measure) {
@@ -1511,9 +1513,6 @@ function ExerciseSolution(exercise, rating, chords, success) {
                     return
                 }
                 var index = find_division_point(list)
-
-                //little hack, should be handled in find_division_point
-                if(index > 1 && mod(value, 2) === 0) index--
 
                 var list1 = list.slice(0, index)
                 var list2 = list.slice(index, list.length)
@@ -3132,7 +3131,7 @@ function convertPitchToOneOctave(pitch){
 
 function isIntegerNumber(x){
     var xString = x+"";
-    var match = xString.match(/0|([1-9]\d*)/gi);
+    var match = xString.match(/^(0|([1-9]\d*))$/gi);
     if(match === null)
         return false;
     return x !== xString && match.length === 1 && match[0] === xString
@@ -3747,7 +3746,7 @@ function HarmonicFunctionValidator(){
     function validateDelay(_this){
         var delay = _this.harmonicFunction.delay;
         if(delay === undefined) handleValidationFailure(_this, "Delay cannot be undefined");
-        if(delay.length > 4) handleValidationFailure(_this, "To large delay list - there are only four voices");
+        if(delay.length > 4) handleValidationFailure(_this, "Too large delay list - there are only four voices");
         for(var i=0; i<delay.length; i++){
             
             if(delay[i].length !== 2) handleValidationFailure(_this, "Wrong size of delay");
@@ -3761,7 +3760,7 @@ function HarmonicFunctionValidator(){
             //too large difference in delay
             var chordComponentManager = new ChordComponentManager();
 
-            if(abs(parseInt(first.baseComponent) - parseInt(second.baseComponent)) > 1 )  handleValidationFailure(_this, "To large difference in delay");
+            if(abs(parseInt(first.baseComponent) - parseInt(second.baseComponent)) > 1 )  handleValidationFailure(_this, "Too large difference in delay");
             // todo to many chord components!
             //todo cannot omit component used in delay, position, resolution, extra
 
@@ -3833,9 +3832,10 @@ function HarmonicFunctionValidator(){
     }
 
     function isValidChordComponent(chordComponent) {
-        return (/(>|<|>>|<<)?\d+/).test(chordComponent.chordComponentString);
+        return (/^(([1-9](>|<|>>|<<)?)|((>|<|>>|<<)[1-9])?)$/gi).test(chordComponent.chordComponentString);
     }
 }
+
 
 function isOctaveOrPrime(note1, note2){
     return note1.baseNote === note2.baseNote;

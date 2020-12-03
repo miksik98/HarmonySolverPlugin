@@ -75,7 +75,7 @@ function HarmonicFunctionValidator(){
     function validateDelay(_this){
         var delay = _this.harmonicFunction.delay;
         if(delay === undefined) handleValidationFailure(_this, "Delay cannot be undefined");
-        if(delay.length > 4) handleValidationFailure(_this, "To large delay list - there are only four voices");
+        if(delay.length > 4) handleValidationFailure(_this, "Too large delay list - there are only four voices");
         for(var i=0; i<delay.length; i++){
             
             if(delay[i].length !== 2) handleValidationFailure(_this, "Wrong size of delay");
@@ -89,7 +89,7 @@ function HarmonicFunctionValidator(){
             //too large difference in delay
             var chordComponentManager = new ChordComponentManager.ChordComponentManager();
 
-            if(Utils.abs(parseInt(first.baseComponent) - parseInt(second.baseComponent)) > 1 )  handleValidationFailure(_this, "To large difference in delay");
+            if(Utils.abs(parseInt(first.baseComponent) - parseInt(second.baseComponent)) > 1 )  handleValidationFailure(_this, "Too large difference in delay");
             // todo to many chord components!
             //todo cannot omit component used in delay, position, resolution, extra
 
@@ -161,6 +161,6 @@ function HarmonicFunctionValidator(){
     }
 
     function isValidChordComponent(chordComponent) {
-        return (/(>|<|>>|<<)?\d+/).test(chordComponent.chordComponentString);
+        return (/^(([1-9](>|<|>>|<<)?)|((>|<|>>|<<)[1-9])?)$/gi).test(chordComponent.chordComponentString);
     }
 }

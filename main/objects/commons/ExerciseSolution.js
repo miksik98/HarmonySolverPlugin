@@ -69,7 +69,9 @@ function ExerciseSolution(exercise, rating, chords, success) {
                     last = 1
                 }
             }
-            return last === 0 ? back + 1 : front
+            if (front === 0)
+                return 1
+            return front
         }
 
         function divide_fun_changed(measure) {
@@ -108,9 +110,6 @@ function ExerciseSolution(exercise, rating, chords, success) {
                     return
                 }
                 var index = find_division_point(list)
-
-                //little hack, should be handled in find_division_point
-                if(index > 1 && Utils.mod(value, 2) === 0) index--
 
                 var list1 = list.slice(0, index)
                 var list2 = list.slice(index, list.length)
