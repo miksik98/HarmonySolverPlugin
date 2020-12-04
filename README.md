@@ -158,6 +158,8 @@ All alteration in bass symbols should be after the number and should be represen
 
 You can delay up to two numbers, for example "6b-5, 4-3". You cannot have delay like "6-".
 
+Whole score should have one metre and should not have an anacrusis.
+
 All alteration symbols without number will be applied to 3.
 
 Here is a table with all supported number bass symbols with their translations (you can also use other symbols and combinations, but they may not be handled correctly):
@@ -214,7 +216,7 @@ List of basic rules:
 * **Illegal doubled third** - third treated as chord component occurs in at least two voices when it is not allowed
 
 Before you will click *Solve*, you should open a score with only soprano voice.
-Remember not to use rests.
+Remember not to use rests. Whole score should have one metre and should not have an anacrusis.
 
 Each note of melody will be harmonized. The number of chords will be equal to number of notes.
 
