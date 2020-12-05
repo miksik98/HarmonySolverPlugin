@@ -471,6 +471,8 @@ MuseScore {
 
         var cursor = curScore.newCursor()
         cursor.rewind(0)
+        var metre = [cursor.measure.timesigActual.numerator, cursor.measure.timesigActual.denominator]
+        var measureDurationTick = (division * (4 / metre[1])) * metre[0]
         var vb = new Consts.VoicesBoundary()
         var elementCounter = 0
         var tracks = [1,4,5]
@@ -483,30 +485,48 @@ MuseScore {
             }
         }
         cursor.track = 0
+        var measureCounter = 0
         do{
+            if(cursor.tick >= measureCounter*measureDurationTick){
+                measureCounter++
+                elementCounter = 0
+            }
             elementCounter++
             if(!Utils.isDefined(cursor.element.noteType)){
                   throw new Errors.FiguredBassInputError(
-                        "Forbidden element at "+elementCounter+" position from beginning",
+                        "Forbidden element in "+measureCounter+" measure at "+elementCounter+" position from its beginning",
                         "Score should contain only notes (no rests etc.)"
                         )
             }
             var currentPitch = cursor.element.notes[0].pitch
             if(currentPitch > vb.bassMax || currentPitch < vb.bassMin){
                   throw new Errors.FiguredBassInputError(
-                        "Bass note not in voice scale at "+elementCounter+" position from beginning"
+                        "Bass note not in voice scale in "+measureCounter+" measure at "+elementCounter+" position from its beginning"
                         )
             }
             if(cursor.element.notes.length > 1){
                   throw new Errors.FiguredBassInputError(
-                        "Forbidden element at "+elementCounter+" position from beginning",
+                        "Forbidden element in "+measureCounter+" measure at "+elementCounter+" position from its beginning",
                         "Score should contain only one voice"
                         )
             }
             if (typeof cursor.element.parent.annotations[0] !== "undefined") {
                 var readSymbols = cursor.element.parent.annotations[0].text
                 if (!Parser.check_figured_bass_symbols(readSymbols))
-                    throw new Errors.FiguredBassInputError("Wrong symbols "+readSymbols,"At "+elementCounter+" position from beginning") 
+                    throw new Errors.FiguredBassInputError("Wrong symbols "+readSymbols,"In "+measureCounter+" measure at "+elementCounter+" position from its beginning")
+            }
+            var currentMetre = [cursor.measure.timesigActual.numerator, cursor.measure.timesigActual.denominator]
+            if(currentMetre[0] !== metre[0] || currentMetre[1] !== metre[1]){
+                  throw new Errors.FiguredBassInputError(
+                        "Metre changes are not supported",
+                        "Forbidden metre change for "+currentMetre[0]+"/"+currentMetre[1]+" in "+measureCounter+" measure at "+elementCounter+" position from its beginning"
+                        )
+            }
+            if(cursor.element.notes[0].tieForward !== null){
+                  throw new Errors.FiguredBassInputError(
+                        "Ties are not supported",
+                        "Not supported tie in "+measureCounter+" measure at "+elementCounter+" position from its beginning"
+                        )
             }
         } while(cursor.next())
     }
@@ -520,6 +540,8 @@ MuseScore {
 
                 var cursor = curScore.newCursor()
                 cursor.rewind(0)
+                var metre = [cursor.measure.timesigActual.numerator, cursor.measure.timesigActual.denominator]
+                var measureDurationTick = (division * (4 / metre[1])) * metre[0]
                 var vb = new Consts.VoicesBoundary()
                 var elementCounter = 0
                 var tracks = [1,4,5]
@@ -532,24 +554,42 @@ MuseScore {
                     }
                 }
                 cursor.track = 0
+                var measureCounter = 0
                 do{
+                    if(cursor.tick >= measureCounter*measureDurationTick){
+                        measureCounter++
+                        elementCounter = 0
+                    }    
                     elementCounter++
                     if(!Utils.isDefined(cursor.element.noteType)){
                           throw new Errors.SopranoInputError(
-                                "Forbidden element at "+elementCounter+" position from beginning",
+                                "Forbidden element in "+measureCounter+" measure at "+elementCounter+" position from its beginning",
                                 "Score should contain only notes (no rests etc.)"
                                 )
                     }
                     if(cursor.element.notes.length > 1){
                           throw new Errors.SopranoInputError(
-                                "Forbidden element at "+elementCounter+" position from beginning",
+                                "Forbidden element in "+measureCounter+" measure at "+elementCounter+" position from its beginning",
                                 "Score should contain only one voice"
                                 )
                     }
                     var currentPitch = cursor.element.notes[0].pitch
                     if(currentPitch > vb.sopranoMax || currentPitch < vb.sopranoMin){
                           throw new Errors.SopranoInputError(
-                                "Soprano note not in voice scale at "+elementCounter+" position from beginning"
+                                "Soprano note not in voice scale in "+measureCounter+" measure at "+elementCounter+" position from its beginning"
+                                )
+                    }
+                    var currentMetre = [cursor.measure.timesigActual.numerator, cursor.measure.timesigActual.denominator]
+                    if(currentMetre[0] !== metre[0] || currentMetre[1] !== metre[1]){
+                          throw new Errors.SopranoInputError(
+                                "Metre changes are not supported",
+                                "Forbidden metre change for "+currentMetre[0]+"/"+currentMetre[1]+" in "+measureCounter+" measure at "+elementCounter+" position from its beginning"
+                                )
+                    }
+                    if(cursor.element.notes[0].tieForward !== null){
+                          throw new Errors.SopranoInputError(
+                                "Ties are not supported",
+                                "Not supported tie in "+measureCounter+" measure at "+elementCounter+" position from its beginning"
                                 )
                     }
                 } while(cursor.next())
