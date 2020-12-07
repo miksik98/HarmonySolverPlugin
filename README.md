@@ -18,12 +18,12 @@ Rule-based system for solving functional harmony exercises
 #### Prerequisites
 
 * MuseScore version at least 3.4 (plugin may not work with version 3.3.4 and lower)
-* Windows (this plugin should also work with Linux systems, but it was not fully tested on Linux distributions)
+* Windows is preferred, but this plugin should also work with Linux systems and Mac OS
 
 #### Installation step by step
 0. Download plugin - click Code -> Download ZIP. Use archive manager (WinRar, 7zip) to unpack it.<br/><br/>
 
-1. Open MuseScore and go to Edit -> Preferences.<br/><br/>
+1. Open MuseScore and go to Edit -> Preferences (Mac: Musescore -> Preferences).<br/><br/>
 ![Alt text](./photos/1.png?raw=true "Title")
 
 2. In tab "General" under "Folders" find path for "Plugins".<br/><br/>

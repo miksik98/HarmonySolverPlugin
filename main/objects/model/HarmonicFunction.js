@@ -285,6 +285,8 @@ function HarmonicFunction2(params, notValidate){
         return new HarmonicFunction2(args, true);
     }
 
+    //todo equals for t (d), where t and (d) have same root
+
     this.equals = function (other) {
         return this.functionName === other.functionName
             && this.degree === other.degree

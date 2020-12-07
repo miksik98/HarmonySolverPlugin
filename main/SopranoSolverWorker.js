@@ -8,11 +8,12 @@ WorkerScript.onMessage = function(sopranoSolverRequestDto) {
         var dto = sopranoSolverRequestReconstruct(sopranoSolverRequestDto)
         var solver = new SopranoSolver(dto.sopranoExercise, dto.punishmentRatios)
         var solution = solver.solve()
-        sleep(100)
+        // sleep(100)
         WorkerScript.sendMessage({ 'type' : "solution", 'solution': solution, 'durations': dto.sopranoExercise.durations})
     } catch (e) {
         WorkerScript.sendMessage({ 'type' : "error", 'error': e})
     }
+    d=0;
 }
 
 function sleep(millis){
@@ -4977,6 +4978,8 @@ function HarmonicFunction2(params, notValidate){
         var args = this.getArgsMap();
         return new HarmonicFunction2(args, true);
     }
+
+    //todo equals for t (d), where t and (d) have same root
 
     this.equals = function (other) {
         return this.functionName === other.functionName

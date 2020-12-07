@@ -30,6 +30,9 @@ MuseScore {
     property var exercise: ({})
     property var exerciseLoaded: false
     property var configuration: ({})
+    property var isHfSolving: false
+    property var isBassSolving: false
+    property var isSopranoSolving: false
 
     id: window
     width: 550
@@ -854,18 +857,20 @@ MuseScore {
 
                         onMessage:  {
                             if(messageObject.type === "progress_notification"){
-                                harmonicFunctionsProgressBar.value = messageObject.progress;
+                                if(isHfSolving) harmonicFunctionsProgressBar.value = messageObject.progress;
                             }
                             else if(messageObject.type === "solution"){
                                 var solution = ExerciseSolution.exerciseSolutionReconstruct(messageObject.solution);
                                 var solution_date = get_solution_date()
                                 prepare_score_for_solution(filePath, solution, solution_date, true, "_hfunc")
                                 fill_score_with_solution(solution)
-                                buttonRun.enabled = true
+                                isHfSolving = false
+                                buttonRun.update()
                                 harmonicFunctionsProgressBar.value = 0
                             }
                             else if(messageObject.type === "error"){
-                                buttonRun.enabled = true
+                                isHfSolving = false
+                                buttonRun.update
                                 harmonicFunctionsProgressBar.value = 0
                                 showError(messageObject.error)
                             }
@@ -1008,13 +1013,18 @@ MuseScore {
                                         !configuration.enablePrechecker,
                                         undefined
                                     ))
-                                    buttonRun.enabled = false;
+                                    isHfSolving = true;
+                                    buttonRun.update();
                                 } catch (error) {
-                                    buttonRun.enabled = true
+                                    isHfSolving = false;
+                                    buttonRun.update()
                                     harmonicFunctionsProgressBar.value = 0
                                     showError(error)
                                 }
                             }
+                        }
+                        property var update: function(){
+                            buttonRun.enabled = !isHfSolving
                         }
                     }
                 }
@@ -1031,7 +1041,7 @@ MuseScore {
 
                         onMessage:  {
                             if(messageObject.type === "progress_notification"){
-                                figuredBassProgressBar.value = messageObject.progress;
+                                if(isBassSolving) figuredBassProgressBar.value = messageObject.progress;
                             }
                             else if(messageObject.type === "solution"){
                                 var solution = ExerciseSolution.exerciseSolutionReconstruct(messageObject.solution);
@@ -1039,11 +1049,13 @@ MuseScore {
 //                                Utils.log("Solution:", JSON.stringify(solution))
                                 prepare_score_for_solution(filePath, solution, solution_date, false, "_bass")
                                 fill_score_with_solution(solution, messageObject.durations)
-                                buttonRunFiguredBass.enabled = true
+                                isBassSolving = false
+                                buttonRunFiguredBass.update()
                                 figuredBassProgressBar.value = 0
                             }
                             else if(messageObject.type === "error"){
-                                buttonRunFiguredBass.enabled = true
+                                isBassSolving = false
+                                buttonRunFiguredBass.update()
                                 figuredBassProgressBar.value = 0
                                 showError(messageObject.error)
                             }
@@ -1115,12 +1127,17 @@ MuseScore {
                                     !configuration.enablePrechecker,
                                     ex.durations
                                 ))
-                                buttonRunFiguredBass.enabled = false
+                                isBassSolving = true
+                                buttonRunFiguredBass.update()
                             } catch (error) {
-                                buttonRunFiguredBass.enabled = true
+                                isBassSolving = false
+                                buttonRunFiguredBass.update()
                                 figuredBassProgressBar.value = 0
                                 showError(error)
                             }
+                        }
+                        property var update: function(){
+                            buttonRunFiguredBass.enabled = !isBassSolving
                         }
                     }
 
@@ -1499,7 +1516,7 @@ MuseScore {
 
                         onMessage:  {
                             if(messageObject.type === "progress_notification"){
-                                sopranoProgressBar.value = messageObject.progress;
+                                if(isSopranoSolving) sopranoProgressBar.value = messageObject.progress;
                             }
                             else if(messageObject.type === "solution"){
                                 var solution = ExerciseSolution.exerciseSolutionReconstruct(messageObject.solution);
@@ -1508,11 +1525,13 @@ MuseScore {
                                     prepare_score_for_solution(filePath, solution, solution_date, false, "_soprano")
                                     fill_score_with_solution(solution, messageObject.durations)
                                 }
-                                buttorSoprano.enabled = true
+                                isSopranoSolving = false
+                                buttorSoprano.update()
                                 sopranoProgressBar.value = 0
                             }
                             else if(messageObject.type === "error"){
-                                buttorSoprano.enabled = true
+                                isSopranoSolving = false
+                                buttorSoprano.update()
                                 sopranoProgressBar.value = 0
                                 showError(messageObject.error)
                             }
@@ -1554,12 +1573,17 @@ MuseScore {
                                         punishments
                                     )
                                 )
-                                buttorSoprano.enabled = false
+                                isSopranoSolving = true
+                                buttorSoprano.update()
                             } catch (error) {
-                                buttorSoprano.enabled = true
+                                isSopranoSolving = false
+                                buttorSoprano.update()
                                 sopranoProgressBar.value = 0
                                 showError(error)
                            }
+                        }
+                        property var update: function(){
+                            buttorSoprano.enabled = !isSopranoSolving
                         }
                     }
                 }
