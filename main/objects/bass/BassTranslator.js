@@ -544,7 +544,7 @@ function BassTranslator() {
     this.changeDelaysDuringModeChange = function(delays, fromMinorToMajor) {
         for (var a = 0; a < delays.length; a++) {
             for (var b = 0; b < delays[a].length; b++) {
-                if (delays[a][b][0] === "6" || delays[a][b][0] === "7") {
+                if ((delays[a][b][0] === "6" || delays[a][b][0] === "7") && delays[a][b].length === 1) {
                     delays[a][b] = fromMinorToMajor ? this.decreaseByHalfTone(delays[a][b]) : this.increaseByHalfTone(delays[a][b])
                 }
             }

@@ -33,10 +33,12 @@ MuseScore {
     property var isHfSolving: false
     property var isBassSolving: false
     property var isSopranoSolving: false
+    property var bassScoreWarnings: ""
+    property var sopranoScoreWarnings: ""
 
     id: window
-    width: 550
-    height: 550
+    width: 570
+    height: 570
     onRun: {
       configuration = PluginConfigurationUtils.readConfiguration(outConfFile, filePath)
     }
@@ -471,6 +473,8 @@ MuseScore {
                   "No score is opened!"
                   )
         }
+        bassScoreWarnings = ""
+        var tiesMeasures = []
 
         var cursor = curScore.newCursor()
         cursor.rewind(0)
@@ -526,12 +530,21 @@ MuseScore {
                         )
             }
             if(cursor.element.notes[0].tieForward !== null){
-                  throw new Errors.FiguredBassInputError(
-                        "Ties are not supported",
-                        "Not supported tie in "+measureCounter+" measure at "+elementCounter+" position from its beginning"
-                        )
+                  tiesMeasures.push(measureCounter)
             }
         } while(cursor.next())
+
+        if (tiesMeasures.length !== 0) {
+            bassScoreWarnings += "Score contains ties (measures ";
+            for (var i = 0; i < tiesMeasures.length; i++) {
+                if (i > 0) {
+                    bassScoreWarnings += ", "
+                }
+                bassScoreWarnings += tiesMeasures[i]
+            }
+            bassScoreWarnings += ") which are not supported and will be ignored.\n"
+        }
+
     }
 
     function isSopranoScore() {
@@ -540,6 +553,8 @@ MuseScore {
                           "No score is opened!"
                           )
                 }
+                sopranoScoreWarnings = ""
+                var tiesMeasures = []
 
                 var cursor = curScore.newCursor()
                 cursor.rewind(0)
@@ -590,12 +605,21 @@ MuseScore {
                                 )
                     }
                     if(cursor.element.notes[0].tieForward !== null){
-                          throw new Errors.SopranoInputError(
-                                "Ties are not supported",
-                                "Not supported tie in "+measureCounter+" measure at "+elementCounter+" position from its beginning"
-                                )
+                        tiesMeasures.push(measureCounter)
                     }
                 } while(cursor.next())
+
+            if (tiesMeasures.length !== 0) {
+                sopranoScoreWarnings += "Score contains ties (measures ";
+                for (var i = 0; i < tiesMeasures.length; i++) {
+                    if (i > 0) {
+                        sopranoScoreWarnings += ", "
+                    }
+                    sopranoScoreWarnings += tiesMeasures[i]
+                }
+                sopranoScoreWarnings += ") which are not supported and will be ignored.\n"
+            }
+
     }
 
     function getPossibleChordsList() {
@@ -836,8 +860,15 @@ MuseScore {
         standardButtons: StandardButton.Ok
     }
 
-    Rectangle {
 
+
+    ScrollView {
+    anchors.fill: parent
+
+        id: scrollView
+        width: 570
+        height: 550
+        
         TabView {
             id: tabView
             width: 550
@@ -1077,17 +1108,17 @@ MuseScore {
                         tooltip: "Help"
                     }
                  
-                        Label {
-                            id: bassInfoLabel
-                            wrapMode: Text.WordWrap
-                            text: qsTr("Remember:\nClick on a note and use shortcut ctrl+G to add figured bass symbol to the bass note.")
-                            font.pointSize: 12
-                            anchors.left: tabRectangle2.left
-                            anchors.top: tabRectangle2.top
-                            anchors.leftMargin: 10
-                            anchors.topMargin: 10
-                            color: "#000000"
-                        }
+                    Label {
+                        id: bassInfoLabel
+                        wrapMode: Text.WordWrap
+                        text: qsTr("Remember:\nClick on a note and use shortcut ctrl+G\nto add figured bass symbol to the bass note.")
+                        font.pointSize: 12
+                        anchors.left: tabRectangle2.left
+                        anchors.top: tabRectangle2.top
+                        anchors.leftMargin: 10
+                        anchors.topMargin: 10
+                        color: "#000000"
+                    }
                     
                     ProgressBar {
                         id: figuredBassProgressBar
@@ -1102,6 +1133,20 @@ MuseScore {
                         width: parent.width - 40
                     }
 
+                    MessageDialog {
+                      id: inputWarningBassDialog
+                      width: 300
+                      height: 400
+                      title: "Score input warning"
+                      text: ""
+                      icon: StandardIcon.Warning
+                      informativeText: "Do you want to continue anyway?"
+                      standardButtons: StandardButton.Yes | StandardButton.No
+                      onYes: {
+                        buttonRunFiguredBass.solve()
+                      }
+                    }
+
                     Button {
                         id: buttonRunFiguredBass
                         text: qsTr("Solve")
@@ -1110,6 +1155,25 @@ MuseScore {
                         anchors.right: tabRectangle2.right
                         anchors.bottom: tabRectangle2.bottom
                         onClicked: {
+                            try {
+                                isFiguredBassScore()
+                                var ex = read_figured_bass()
+                                if (bassScoreWarnings.length !== 0) {
+                                    inputWarningBassDialog.text = bassScoreWarnings
+                                    inputWarningBassDialog.open()
+                                } else {
+                                    buttonRunFiguredBass.solve()
+                                }
+
+                            } catch (error) {
+                                isBassSolving = false
+                                buttonRunFiguredBass.update()
+                                figuredBassProgressBar.value = 0
+                                showError(error)
+                            }
+                        }
+
+                        property var solve: function() {
                             try {
                                 isFiguredBassScore()
                                 var ex = read_figured_bass()
@@ -1136,6 +1200,7 @@ MuseScore {
                                 showError(error)
                             }
                         }
+
                         property var update: function(){
                             buttonRunFiguredBass.enabled = !isBassSolving
                         }
@@ -1552,6 +1617,20 @@ MuseScore {
                         width: parent.width - 40
                     }
 
+                    MessageDialog {
+                      id: inputWarningSopranoDialog
+                      width: 300
+                      height: 400
+                      title: "Score input warning"
+                      text: ""
+                      icon: StandardIcon.Warning
+                      informativeText: "Do you want to continue anyway?"
+                      standardButtons: StandardButton.Yes | StandardButton.No
+                      onYes: {
+                        buttorSoprano.solve()
+                      }
+                    }
+
                     Button {
 
                         id: buttorSoprano
@@ -1562,6 +1641,23 @@ MuseScore {
                         anchors.bottomMargin: 10
                         anchors.rightMargin: 10
                         onClicked: {
+                            try{
+                                isSopranoScore()
+                                if (sopranoScoreWarnings.length !== 0) {
+                                    inputWarningSopranoDialog.text = sopranoScoreWarnings
+                                    inputWarningSopranoDialog.open()
+                                } else {
+                                    buttorSoprano.solve()
+                                }
+                            } catch (error) {
+                                isSopranoSolving = false
+                                buttorSoprano.update()
+                                sopranoProgressBar.value = 0
+                                showError(error)
+                           }
+                        }
+
+                        property var solve: function() {
                             try{
                                 isSopranoScore()
                                 var func_list = getPossibleChordsList()
@@ -1582,6 +1678,7 @@ MuseScore {
                                 showError(error)
                            }
                         }
+
                         property var update: function(){
                             buttorSoprano.enabled = !isSopranoSolving
                         }

@@ -3728,7 +3728,7 @@ function toBaseNote(scaleBaseNote, harmonicFunction, chordComponent) {
 var DEBUG = false;
 
 function check_figured_bass_symbols(symbols){
-    var figured_bass_symbols = /^((([0-9][bh#]?(\-[0-9][bh#]?)?)|([bh#]))(\n(([0-9][bh#]?(\-[0-9][bh#]?)?)|([bh#])))*)$/gi;
+    var figured_bass_symbols = /^((([0-9]+[bh#]?(\-[0-9][bh#]?)?)|([bh#]))(\n(([0-9][bh#]?(\-[0-9][bh#]?)?)|([bh#]))\n?)*)$/gi;
     return figured_bass_symbols.test(symbols);
 }
 
