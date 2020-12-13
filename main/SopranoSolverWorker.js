@@ -175,13 +175,13 @@ function getModeFromKey(key){
 }
 
 // meter = [nominator,denominator], measureCount is sum of notes from beginning of measure
-function getMeasurePlace(meter, measureCount){
+function getMeasurePlace(meter, measureCount, isRecursive){
     measureCount *= meter[1];
     //if not integer - return UPBEAT
     if(parseInt(measureCount) !== measureCount)
         return MEASURE_PLACE.UPBEAT;
     if(measureCount === 0)
-        return MEASURE_PLACE.BEGINNING;
+        return isRecursive ? MEASURE_PLACE.DOWNBEAT : MEASURE_PLACE.BEGINNING;
     var numerator = meter[0];
 
     if(isPowerOf2(numerator)){
@@ -193,30 +193,22 @@ function getMeasurePlace(meter, measureCount){
         return MEASURE_PLACE.UPBEAT;
     }
 
-    var threesNumber, twosNumber;
-    switch(numerator % 3){
-        case 0:
-            threesNumber = numerator / 3;
-            twosNumber = 0;
-            break;
-        case 1:
-            threesNumber = (numerator - 4) / 3;
-            twosNumber = 2;
-            break;
-        case 2:
-            threesNumber = (numerator - 2) / 3;
-            twosNumber = 1;
-            break;
+    if(numerator % 3 === 0) {
+        for (var i = 3; i < numerator; i += 3) {
+            if (measureCount === i)
+                return MEASURE_PLACE.DOWNBEAT;
+        }
+        return MEASURE_PLACE.UPBEAT;
     }
-    var counter = 0;
-    for(var i = 0; i < threesNumber; i++){
-        counter += 3;
-        if(measureCount === counter)
-            return MEASURE_PLACE.DOWNBEAT;
+
+    var part1 = Math.ceil(numerator / 2);
+    var part2 = Math.floor(numerator / 2);
+
+    if(measureCount < part1){
+        return getMeasurePlace([part1, meter[1]], measureCount/meter[1], true);
+    } else {
+        return getMeasurePlace([part2, meter[1]], (measureCount-part1)/meter[1], true);
     }
-    if(twosNumber === 2 && measureCount === counter + 2)
-        return MEASURE_PLACE.DOWNBEAT;
-    return MEASURE_PLACE.UPBEAT;
 }
 
 function isPowerOf2(n){
@@ -1600,13 +1592,13 @@ function getModeFromKey(key){
 }
 
 // meter = [nominator,denominator], measureCount is sum of notes from beginning of measure
-function getMeasurePlace(meter, measureCount){
+function getMeasurePlace(meter, measureCount, isRecursive){
     measureCount *= meter[1];
     //if not integer - return UPBEAT
     if(parseInt(measureCount) !== measureCount)
         return MEASURE_PLACE.UPBEAT;
     if(measureCount === 0)
-        return MEASURE_PLACE.BEGINNING;
+        return isRecursive ? MEASURE_PLACE.DOWNBEAT : MEASURE_PLACE.BEGINNING;
     var numerator = meter[0];
 
     if(isPowerOf2(numerator)){
@@ -1618,30 +1610,22 @@ function getMeasurePlace(meter, measureCount){
         return MEASURE_PLACE.UPBEAT;
     }
 
-    var threesNumber, twosNumber;
-    switch(numerator % 3){
-        case 0:
-            threesNumber = numerator / 3;
-            twosNumber = 0;
-            break;
-        case 1:
-            threesNumber = (numerator - 4) / 3;
-            twosNumber = 2;
-            break;
-        case 2:
-            threesNumber = (numerator - 2) / 3;
-            twosNumber = 1;
-            break;
+    if(numerator % 3 === 0) {
+        for (var i = 3; i < numerator; i += 3) {
+            if (measureCount === i)
+                return MEASURE_PLACE.DOWNBEAT;
+        }
+        return MEASURE_PLACE.UPBEAT;
     }
-    var counter = 0;
-    for(var i = 0; i < threesNumber; i++){
-        counter += 3;
-        if(measureCount === counter)
-            return MEASURE_PLACE.DOWNBEAT;
+
+    var part1 = Math.ceil(numerator / 2);
+    var part2 = Math.floor(numerator / 2);
+
+    if(measureCount < part1){
+        return getMeasurePlace([part1, meter[1]], measureCount/meter[1], true);
+    } else {
+        return getMeasurePlace([part2, meter[1]], (measureCount-part1)/meter[1], true);
     }
-    if(twosNumber === 2 && measureCount === counter + 2)
-        return MEASURE_PLACE.DOWNBEAT;
-    return MEASURE_PLACE.UPBEAT;
 }
 
 function isPowerOf2(n){
