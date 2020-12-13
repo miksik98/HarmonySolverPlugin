@@ -238,8 +238,11 @@ Rules that will be evaluated:
 * False relation
 
 All chords will be treated by validator as if they have different harmonic functions.
-So when for example tonic will be repeated with fifth between tenor and bass
+So when for example tonic will be repeated with fifth between soprano and alto
 validator will also treat this connection as breaking parallel fifths rule.
+There is made one assumption: when validator finds parallel fifth/octave between bass
+and other voice, and bass is staying at same pitch - validator treats these two chords
+as if they have same harmonic function. 
 
 ### Plugin settings
 You can choose path for solution scores. The default path is /main/solutions.

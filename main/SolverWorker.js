@@ -2202,8 +2202,8 @@ function ChordRulesChecker(isFixedBass, isFixedSoprano){
 function BasicHardRulesChecker(){
     Evaluator.call(this, 2);
     this.hardRules = [
-        new ConcurrentOctavesRule("Parallel octaves"),
-        new ConcurrentFifthsRule("Parallel fifths"),
+        new ConcurrentOctavesHeuristicRule("Parallel octaves"),
+        new ConcurrentFifthsHeuristicRule("Parallel fifths"),
         new CrossingVoicesRule("Crossing voices"),
         new OneDirectionRule("One direction of voices"),
         new ForbiddenJumpRule(false, false, false, "Forbidden voice jump"),
@@ -2351,6 +2351,44 @@ function ConcurrentFifthsRule(details, evaluationRatio){
                     isFive(prevChord.notes[j], prevChord.notes[i])) {
                     if (DEBUG) log("concurrentFifths " + i + " " + j, prevChord + " -> " + currentChord);
                     return this.evaluationRatio * 40;
+                }
+            }
+        }
+        return 0;
+    }
+}
+
+function ConcurrentOctavesHeuristicRule(details, evaluationRatio){
+    IRule.call(this, details, evaluationRatio);
+
+    this.evaluate = function(connection){
+        var currentChord = connection.current;
+        var prevChord = connection.prev;
+        for(var i = 0; i < 3; i++){
+            for(var j = i + 1; j < 4; j++){
+                if(isOctaveOrPrime(currentChord.notes[j],currentChord.notes[i]) &&
+                    isOctaveOrPrime(prevChord.notes[j],prevChord.notes[i])){
+                    if (!(i === 0 && prevChord.bassNote.equalPitches(currentChord.bassNote)))
+                        return 40;
+                }
+            }
+        }
+        return 0;
+    }
+}
+
+function ConcurrentFifthsHeuristicRule(details, evaluationRatio){
+    IRule.call(this, details, evaluationRatio);
+
+    this.evaluate = function(connection) {
+        var currentChord = connection.current;
+        var prevChord = connection.prev;
+        for (var i = 0; i < 3; i++) {
+            for (var j = i + 1; j < 4; j++) {
+                if (isFive(currentChord.notes[j], currentChord.notes[i]) &&
+                    isFive(prevChord.notes[j], prevChord.notes[i])) {
+                    if (!(i === 0 && prevChord.bassNote.equalPitches(currentChord.bassNote)))
+                        return 40;
                 }
             }
         }

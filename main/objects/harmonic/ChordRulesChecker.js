@@ -40,8 +40,8 @@ function ChordRulesChecker(isFixedBass, isFixedSoprano){
 function BasicHardRulesChecker(){
     RulesCheckerUtils.Evaluator.call(this, 2);
     this.hardRules = [
-        new ConcurrentOctavesRule("Parallel octaves"),
-        new ConcurrentFifthsRule("Parallel fifths"),
+        new ConcurrentOctavesHeuristicRule("Parallel octaves"),
+        new ConcurrentFifthsHeuristicRule("Parallel fifths"),
         new CrossingVoicesRule("Crossing voices"),
         new OneDirectionRule("One direction of voices"),
         new ForbiddenJumpRule(false, false, false, "Forbidden voice jump"),
@@ -189,6 +189,44 @@ function ConcurrentFifthsRule(details, evaluationRatio){
                     IntervalUtils.isFive(prevChord.notes[j], prevChord.notes[i])) {
                     if (DEBUG) Utils.log("concurrentFifths " + i + " " + j, prevChord + " -> " + currentChord);
                     return this.evaluationRatio * 40;
+                }
+            }
+        }
+        return 0;
+    }
+}
+
+function ConcurrentOctavesHeuristicRule(details, evaluationRatio){
+    RulesCheckerUtils.IRule.call(this, details, evaluationRatio);
+
+    this.evaluate = function(connection){
+        var currentChord = connection.current;
+        var prevChord = connection.prev;
+        for(var i = 0; i < 3; i++){
+            for(var j = i + 1; j < 4; j++){
+                if(IntervalUtils.isOctaveOrPrime(currentChord.notes[j],currentChord.notes[i]) &&
+                    IntervalUtils.isOctaveOrPrime(prevChord.notes[j],prevChord.notes[i])){
+                    if (!(i === 0 && prevChord.bassNote.equalPitches(currentChord.bassNote)))
+                        return 40;
+                }
+            }
+        }
+        return 0;
+    }
+}
+
+function ConcurrentFifthsHeuristicRule(details, evaluationRatio){
+    RulesCheckerUtils.IRule.call(this, details, evaluationRatio);
+
+    this.evaluate = function(connection) {
+        var currentChord = connection.current;
+        var prevChord = connection.prev;
+        for (var i = 0; i < 3; i++) {
+            for (var j = i + 1; j < 4; j++) {
+                if (IntervalUtils.isFive(currentChord.notes[j], currentChord.notes[i]) &&
+                    IntervalUtils.isFive(prevChord.notes[j], prevChord.notes[i])) {
+                    if (!(i === 0 && prevChord.bassNote.equalPitches(currentChord.bassNote)))
+                        return 40;
                 }
             }
         }
