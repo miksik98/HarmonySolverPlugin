@@ -1,4 +1,5 @@
 .import "../model/HarmonicFunction.js" as HarmonicFunction
+.import "../harmonic/ChordRulesChecker.js" as RulesChecker
 
 function Exercise(key, meter, mode, measures) {
     this.mode = mode
@@ -35,4 +36,25 @@ function exerciseReconstruct(ex){
     }
 
     return new Exercise(ex.key, ex.meter, ex.mode, measures);
+}
+
+function SolvedExercise(chords){
+    this.chords = chords;
+    this.rulesChecker = new RulesChecker.BasicHardRulesChecker();
+    this.checkCorrectness = function () {
+        var brokenRulesReport = "";
+        for(var i = 0; i < this.chords.length-1; i++) {
+            var brokenRules = this.rulesChecker.findBrokenHardRules(this.chords[i], this.chords[i+1]);
+            if(brokenRules.length > 0){
+                brokenRulesReport += "\nChord " + (i+1) + " -> Chord " + (i+2);
+                for(var j = 0; j < brokenRules.length; j++){
+                    brokenRulesReport += "\n\t- "+brokenRules[j];
+                }
+            }
+        }
+        if(brokenRulesReport === ""){
+            return "Correct!\t\t"
+        }
+        return "Found some broken rules!\t\t\n"+brokenRulesReport;
+    }
 }

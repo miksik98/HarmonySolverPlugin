@@ -1424,6 +1424,27 @@ function exerciseReconstruct(ex){
     return new Exercise(ex.key, ex.meter, ex.mode, measures);
 }
 
+function SolvedExercise(chords){
+    this.chords = chords;
+    this.rulesChecker = new BasicHardRulesChecker();
+    this.checkCorrectness = function () {
+        var brokenRulesReport = "";
+        for(var i = 0; i < this.chords.length-1; i++) {
+            var brokenRules = this.rulesChecker.findBrokenHardRules(this.chords[i], this.chords[i+1]);
+            if(brokenRules.length > 0){
+                brokenRulesReport += "\nChord " + (i+1) + " -> Chord " + (i+2);
+                for(var j = 0; j < brokenRules.length; j++){
+                    brokenRulesReport += "\n\t- "+brokenRules[j];
+                }
+            }
+        }
+        if(brokenRulesReport === ""){
+            return "Correct!\t\t"
+        }
+        return "Found some broken rules!\t\t\n"+brokenRulesReport;
+    }
+}
+
 
 function contains(list, obj) {
     for (var i = 0; i < list.length; i++) {
@@ -2069,6 +2090,16 @@ function SolverError(message, details){
     this.source = "Error during harmonization"
 }
 
+function FourPartSolutionInputError(message, details){
+    BasicError.call(this, message, details)
+    this.source = "Error in four part solution analyze input"
+}
+
+function ChordInitializationError(message, details){
+    BasicError.call(this, message, details)
+    this.source = "Error during creating chord"
+}
+
 function ChordGeneratorInput(harmonicFunction, allowDoubleThird, sopranoNote, bassNote) {
     this.harmonicFunction = harmonicFunction;
     this.allowDoubleThird = allowDoubleThird;
@@ -2561,6 +2592,29 @@ function ChordRulesChecker(isFixedBass, isFixedSoprano){
         new DominantSecondRelationCheckConnectionRule("Dominant second relation voice wrong movement"),
         new SubdominantDominantCheckConnectionRule("Subdominant Dominant relation voice wrong movement")
     ];
+}
+
+function BasicHardRulesChecker(){
+    Evaluator.call(this, 2);
+    this.hardRules = [
+        new ConcurrentOctavesRule("Parallel octaves"),
+        new ConcurrentFifthsRule("Parallel fifths"),
+        new CrossingVoicesRule("Crossing voices"),
+        new OneDirectionRule("One direction of voices"),
+        new ForbiddenJumpRule(false, false, false, "Forbidden voice jump"),
+        new HiddenOctavesRule("Hidden parallel octaves"),
+        new FalseRelationRule("False relation")
+    ];
+
+    this.findBrokenHardRules = function(prevChord, currentChord){
+        var connection = new Connection(currentChord, prevChord);
+        var brokenRules = [];
+        for(var i = 0; i < this.hardRules.length; i++){
+            if(this.hardRules[i].isBroken(connection))
+                brokenRules.push(this.hardRules[i].details);
+        }
+        return brokenRules;
+    }
 }
 
 function AdaptiveChordRulesChecker(punishmentRatios){
@@ -5281,6 +5335,12 @@ function Chord(sopranoNote, altoNote, tenorNote, bassNote, harmonicFunction) {
     this.harmonicFunction = harmonicFunction
     this.notes = [bassNote, tenorNote, altoNote, sopranoNote]
     this.duration = undefined
+
+    for(var i = 0; i < 3; i++){
+        if(this.notes[i].isUpperThan(this.notes[i+1])){
+            throw new ChordInitializationError("Incorrect relationship between voices")
+        }
+    }
 
     this.toString = function () {
         var chordStr = "CHORD: \n";

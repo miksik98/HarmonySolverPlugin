@@ -37,6 +37,29 @@ function ChordRulesChecker(isFixedBass, isFixedSoprano){
     ];
 }
 
+function BasicHardRulesChecker(){
+    RulesCheckerUtils.Evaluator.call(this, 2);
+    this.hardRules = [
+        new ConcurrentOctavesRule("Parallel octaves"),
+        new ConcurrentFifthsRule("Parallel fifths"),
+        new CrossingVoicesRule("Crossing voices"),
+        new OneDirectionRule("One direction of voices"),
+        new ForbiddenJumpRule(false, false, false, "Forbidden voice jump"),
+        new HiddenOctavesRule("Hidden parallel octaves"),
+        new FalseRelationRule("False relation")
+    ];
+
+    this.findBrokenHardRules = function(prevChord, currentChord){
+        var connection = new RulesCheckerUtils.Connection(currentChord, prevChord);
+        var brokenRules = [];
+        for(var i = 0; i < this.hardRules.length; i++){
+            if(this.hardRules[i].isBroken(connection))
+                brokenRules.push(this.hardRules[i].details);
+        }
+        return brokenRules;
+    }
+}
+
 function AdaptiveChordRulesChecker(punishmentRatios){
     ChordRulesChecker.call(this, false, true);
     this.punishmentRatios = punishmentRatios;

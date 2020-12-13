@@ -9,6 +9,7 @@ Rule-based system for solving functional harmony exercises
     * [Exercises with given harmonic functions](#exercises-with-given-harmonic-functions)
     * [Exercises with given figured bass](#exercises-with-given-figured-bass)
     * [Exercises with given soprano melody](#exercises-with-given-soprano-melody)
+    * [Solved exercise validator](#solved-exercise-validator)
     * [Plugin settings](#plugin-settings)
 * [Inspirations](#inspirations)    
 * [Team](#team)    
@@ -221,6 +222,24 @@ Remember not to use rests. Whole score should have one metre and should not have
 Each note of melody will be harmonized. The number of chords will be equal to number of notes.
 
 There are also some example scores in folder /examples/soprano.
+
+### Solved exercise validator
+To check correctness of your own solution open a tab called "Validator".
+
+Here is a button which you can press to validate opened score.
+Score should contain all four voices satisfying chord homophony.
+Rules that will be evaluated:
+* Parallel octaves 
+* Parallel fifths
+* Crossing voices
+* One direction
+* Forbidden jump
+* Hidden octaves
+* False relation
+
+All chords will be treated by validator as if they have different harmonic functions.
+So when for example tonic will be repeated with fifth between tenor and bass
+validator will also treat this connection as breaking parallel fifths rule.
 
 ### Plugin settings
 You can choose path for solution scores. The default path is /main/solutions.

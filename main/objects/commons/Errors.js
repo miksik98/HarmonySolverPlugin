@@ -49,3 +49,13 @@ function SolverError(message, details){
     BasicError.call(this, message, details)
     this.source = "Error during harmonization"
 }
+
+function FourPartSolutionInputError(message, details){
+    BasicError.call(this, message, details)
+    this.source = "Error in four part solution analyze input"
+}
+
+function ChordInitializationError(message, details){
+    BasicError.call(this, message, details)
+    this.source = "Error during creating chord"
+}

@@ -1,5 +1,6 @@
 .import "../model/Note.js" as Note
 .import "../model/HarmonicFunction.js" as HarmonicFunction
+.import "../commons/Errors.js" as Errors
 
 function Chord(sopranoNote, altoNote, tenorNote, bassNote, harmonicFunction) {
     this.sopranoNote = sopranoNote
@@ -9,6 +10,12 @@ function Chord(sopranoNote, altoNote, tenorNote, bassNote, harmonicFunction) {
     this.harmonicFunction = harmonicFunction
     this.notes = [bassNote, tenorNote, altoNote, sopranoNote]
     this.duration = undefined
+
+    for(var i = 0; i < 3; i++){
+        if(this.notes[i].isUpperThan(this.notes[i+1])){
+            throw new Errors.ChordInitializationError("Incorrect relationship between voices")
+        }
+    }
 
     this.toString = function () {
         var chordStr = "CHORD: \n";
