@@ -262,7 +262,8 @@ where fifth should be omitted (if not specified) to avoid parallel fifths
 (if not specified)
 * for Chopin chord adds fifth to omit (if not specified)
 
-Using prechecker and corrector is recommended for beginners.
+Using prechecker and corrector is recommended for beginners, but it will increase time
+of finding solution.
 
 Plugin settings are persistent and if you exit plugin and launch it again they 
 will load exactly like you set before turning plugin off.
