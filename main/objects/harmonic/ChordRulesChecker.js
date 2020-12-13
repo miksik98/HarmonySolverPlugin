@@ -409,7 +409,7 @@ function FalseRelationRule(details, evaluationRatio){
 
     this.causedBySopranoOrBassSettings = function(prevChord, currentChord, prevVoice, currentVoice){
         //for example D7 -> TVI -> (D) -> SII
-        if(prevChord.countBaseComponents("3") === 2 && prevChord.notes[prevVoice].baseChordComponentEquals("3"))
+        if(Utils.isDefined(prevChord.bassNote.chordComponent) && prevChord.countBaseComponents("3") === 2 && prevChord.notes[prevVoice].baseChordComponentEquals("3"))
             return true;
         //given bass, couldn't avoid false relation
         if(prevVoice === 0 || currentVoice === 0)
