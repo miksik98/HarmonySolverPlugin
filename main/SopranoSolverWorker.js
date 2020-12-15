@@ -2352,7 +2352,7 @@ function ChordGenerator(key, mode) {
 
             for (var n = 0; n < bass.length && !foundForCurrentIteration; n++) {
                 for (var j = 0; j < tenor.length && !foundForCurrentIteration; j++) {
-                    if (tenor[j] >= bass[n]) {
+                    if (tenor[j] >= bass[n]  && tenor[j] - bass[n] <= 24) {
                         for (var k = 0; k < alto.length && !foundForCurrentIteration; k++) {
                             if (alto[k] >= tenor[j] && alto[k] - tenor[j] <= 12) {
                                 for (var m = 0; m < soprano.length && !foundForCurrentIteration; m++) {
@@ -2404,7 +2404,7 @@ function ChordGenerator(key, mode) {
 
             for (var n = 0; n < bass.length; n++) {
                 for (var j = 0; j < tenor.length; j++) {
-                    if (tenor[j] >= bass[n]) {
+                    if (tenor[j] >= bass[n] && tenor[j] - bass[n] <= 24) {
                         for (var k = 0; k < alto.length; k++) {
                             if (alto[k] >= tenor[j] && alto[k] - tenor[j] <= 12) {
                                 for (var m = 0; m < soprano.length; m++) {
