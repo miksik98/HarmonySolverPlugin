@@ -781,7 +781,32 @@ MuseScore {
                 elementCounter = 0
             }
             elementCounter++
-
+            selectSoprano(cursor)
+            var sopranoPitch = cursor.element.notes[0].pitch
+            selectAlto(cursor)
+            var altoPitch = cursor.element.notes[0].pitch
+            selectTenor(cursor)
+            var tenorPitch = cursor.element.notes[0].pitch
+            selectBass(cursor)
+            var bassPitch = cursor.element.notes[0].pitch
+            if(sopranoPitch - altoPitch > 12){
+                throw new Errors.FourPartSolutionInputError(
+                    "Too big distance between voices: soprano and alto",
+                    measureCounter+" measure at "+elementCounter+" position from its beginning"
+                )
+            }
+            if(altoPitch - tenorPitch > 12){
+                throw new Errors.FourPartSolutionInputError(
+                    "Too big distance between voices: alto and tenor",
+                    measureCounter+" measure at "+elementCounter+" position from its beginning"
+                )
+            }
+            if(tenorPitch - bassPitch > 24){
+                throw new Errors.FourPartSolutionInputError(
+                    "Too big distance between voices: tenor and bass",
+                    measureCounter+" measure at "+elementCounter+" position from its beginning"
+                )
+            }
         } while(cursor.next())
 
         if (tiesMeasures.length !== 0) {
