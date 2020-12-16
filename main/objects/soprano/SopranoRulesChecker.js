@@ -25,7 +25,8 @@ function SopranoRulesChecker(key, mode, punishmentRatios){
         new SecondaryDominantConnectionRule(this.key),
         new Revolution5Rule(),
         new DownAndNotDownRule(),
-        new DegreeRule()
+        new DegreeRule(),
+        new KeepBasicChordsInSecondRelationRule()
     ];
     this.softRules = [
         new HarmonicFunctionRelationRule(),
@@ -68,6 +69,17 @@ function ExistsSolutionRule(chordRulesChecker, chordGenerator){
             }
         }
         return -1;
+    }
+}
+
+function KeepBasicChordsInSecondRelationRule(){
+    RulesCheckerUtils.IRule.call(this);
+    this.evaluate = function(connection){
+        if(connection.prev.harmonicFunction.isInSecondRelation(connection.current.harmonicFunction) &&
+            connection.current.harmonicFunction.revolution !== connection.current.harmonicFunction.getPrime()){
+            return -1;
+        }
+        return 0;
     }
 }
 
