@@ -228,6 +228,8 @@ To check correctness of your own solution open a tab called "Validator".
 
 Here is a button which you can press to validate opened score.
 Score should contain all four voices satisfying chord homophony.
+Soprano and tenor should be written down using 1st voice from MuseScore.
+Alto and bass should be written down using 2nd voice from MuseScore.
 Rules that will be evaluated:
 * Parallel octaves 
 * Parallel fifths
