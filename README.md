@@ -5,6 +5,7 @@ Rule-based system for solving functional harmony exercises
 * [Installation](#installation)
     * [Prerequisites](#prerequisites)
     * [Installation step by step](#installation-step-by-step)
+    * [Musescore 3.6.x](#musescore-3-6-x)
 * [How to use](#how-to-use)
     * [Exercises with given harmonic functions](#exercises-with-given-harmonic-functions)
     * [Exercises with given figured bass](#exercises-with-given-figured-bass)
@@ -18,7 +19,7 @@ Rule-based system for solving functional harmony exercises
 
 #### Prerequisites
 
-* MuseScore version at least 3.4 (plugin may not work with version 3.3.4 and lower). We reccomend newest version 3.5.x (since version 3.6 has problems with chords descriptions and opening new scores by plugin)
+* MuseScore version at least 3.4 (plugin may not work with version 3.3.4 and lower). We reccomend newest version 3.5.x 
 * Windows is preferred, but this plugin should also work with Linux systems and Mac OS
 
 #### Installation step by step
@@ -42,6 +43,15 @@ You can also set here keyboard shortcut for harmonySolver (Define Shortcut).<br/
 
 6. After that, you can use harmonySolver plugin by clicking Plugins -> HarmonySolver or using defined shortcut.<br/><br/>
 ![Alt text](./photos/6.png?raw=true "Title")
+
+### Musescore 3.6.X
+For MuseScore 3.6.x it is essential to either 
+* uncheck the option <TODO>
+ or
+* check the "Remember my choice and don't ask again" option during first appearance of "Would you like to try our improved score style" window (does not matter whether you choose the new or old style)
+
+Without that, solutions will not be displayed correctly.
+
 
 ## How to use
 Plugin solves three types of exercises connected with functional harmony:
