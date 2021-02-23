@@ -47,7 +47,7 @@ You can also set here keyboard shortcut for harmonySolver (Define Shortcut).<br/
 ### Musescore 3.6.X
 For MuseScore 3.6.x it is essential to either 
 * uncheck the option "Show option to apply imported engraving and style settings"
-![Alt text](./photos/unchek.png?raw=true "Title")
+![Alt text](./photos/uncheck.png?raw=true "Title")
 
  **or**
 * check the "Remember my choice and don't ask again" option during first appearance of "Would you like to try our improved score style" window (does not matter whether you choose the new or old style)
