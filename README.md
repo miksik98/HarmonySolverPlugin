@@ -34,6 +34,8 @@ Rule-based system for solving functional harmony exercises
 3. Copy whole unpacked "HarmonySolverPlugin-master" folder to this path.<br/><br/>
 ![Alt text](./photos/3.png?raw=true "Title")
 
+3.5. If you have MuseScore 3.6.0 or newer, go to HarmonySolverPlugin-master -> main, delete folder "resources" and rename folder "resources3.6" to "resources"
+
 4. Restart MuseScore and go to Plugins -> Plugin Manager.<br/><br/>
 ![Alt text](./photos/4.png?raw=true "Title")
 
@@ -55,10 +57,6 @@ For MuseScore 3.6.x it is essential to either
 
 Without that, solutions will not be displayed correctly.
 
-Also, during opening solution, window like this will appear (score name that contains key may be different)
-![Alt text](./photos/sbc.png?raw=true "Title")
-
-Please click **DISCARD**.
 
 ## How to use
 Plugin solves three types of exercises connected with functional harmony:
