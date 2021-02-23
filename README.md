@@ -55,6 +55,10 @@ For MuseScore 3.6.x it is essential to either
 
 Without that, solutions will not be displayed correctly.
 
+Also, during opening solution, window like this will appear (score name that contains key may be different)
+![Alt text](./photos/sbc.png?raw=true "Title")
+
+Please click **DISCARD**.
 
 ## How to use
 Plugin solves three types of exercises connected with functional harmony:
